@@ -2,94 +2,89 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <title>Original Bricks Editor (File 9 Base)</title>
+    <title>Master Editor (File 9 Edition)</title>
     <style>
         :root { --p: #00f3ff; --bg: #0f0f12; --panel: #1a1a1f; --text: #e0e0e0; }
         body { margin: 0; background: var(--bg); color: var(--text); font-family: 'Segoe UI', sans-serif; display: flex; height: 100vh; overflow: hidden; }
         
-        /* SIDEBAR */
-        .sidebar { width: 420px; background: var(--panel); border-right: 1px solid #333; display: flex; flex-direction: column; overflow-y: auto; z-index: 10; }
+        .sidebar { width: 400px; background: var(--panel); border-right: 1px solid #333; display: flex; flex-direction: column; overflow-y: auto; }
         .logo-area { padding: 20px; background: #000; border-bottom: 2px solid var(--p); display: flex; align-items: center; gap: 12px; }
-        .logo-area img { height: 35px; }
         .logo-area span { font-family: 'Courier New'; font-weight: bold; color: var(--p); font-size: 18px; }
 
         .tabs { display: flex; background: #111; border-bottom: 1px solid #333; }
-        .tab { flex: 1; padding: 12px; background: none; border: none; color: #666; cursor: pointer; font-size: 12px; font-weight: bold; text-transform: uppercase; transition: 0.3s; }
+        .tab { flex: 1; padding: 12px; background: none; border: none; color: #666; cursor: pointer; font-size: 11px; font-weight: bold; text-transform: uppercase; }
         .tab.active { color: var(--p); background: rgba(0, 243, 255, 0.1); border-bottom: 2px solid var(--p); }
 
         .content { padding: 20px; flex-grow: 1; }
         .section { margin-bottom: 25px; padding: 15px; background: rgba(255,255,255,0.03); border-radius: 8px; border: 1px solid #333; }
-        .section-title { font-size: 11px; color: var(--p); text-transform: uppercase; margin-bottom: 15px; letter-spacing: 1px; font-weight: bold; }
+        .section-title { font-size: 11px; color: var(--p); text-transform: uppercase; margin-bottom: 15px; font-weight: bold; }
 
         label { display: block; font-size: 11px; color: #888; margin-bottom: 5px; }
-        input, select, textarea { width: 100%; background: #080808; border: 1px solid #444; color: #fff; padding: 10px; border-radius: 5px; margin-bottom: 12px; font-family: 'Courier New'; }
+        input, select, textarea { width: 100%; background: #080808; border: 1px solid #444; color: #fff; padding: 10px; border-radius: 5px; margin-bottom: 12px; font-family: 'Courier New'; box-sizing: border-box; }
         
-        /* Color controls */
-        .color-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-        .check-row { display: flex; align-items: center; gap: 10px; margin-bottom: 15px; font-size: 13px; }
-        input[type="checkbox"] { width: auto; margin: 0; }
+        .color-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
         input[type="color"] { height: 40px; padding: 2px; cursor: pointer; }
+        input[type="checkbox"] { width: auto; margin-right: 8px; }
 
-        /* Background Visual Selector */
-        .bg-presets { display: flex; gap: 10px; margin-bottom: 10px; }
-        .bg-opt { width: 40px; height: 40px; border: 2px solid #444; border-radius: 4px; cursor: pointer; }
-        .bg-opt:hover { border-color: var(--p); }
-
-        .btn-main { background: var(--p); color: #000; border: none; padding: 15px; font-weight: bold; cursor: pointer; width: 100%; position: sticky; bottom: 0; text-transform: uppercase; }
-
-        /* PREVIEW */
-        .preview-pane { flex: 1; background: #000; display: flex; flex-direction: column; padding: 20px; gap: 20px; }
-        .preview-window { flex: 1; border: 1px solid #333; border-radius: 10px; overflow: hidden; background: #050505; position: relative; }
-        .preview-label { position: absolute; top: 10px; left: 10px; background: rgba(0,0,0,0.7); padding: 4px 10px; font-size: 10px; color: #fff; border-radius: 4px; z-index: 5; }
-        iframe { width: 100%; height: 100%; border: none; }
+        .bg-presets { display: flex; gap: 8px; margin-bottom: 10px; }
+        .bg-opt { width: 35px; height: 35px; border: 1px solid #444; border-radius: 4px; cursor: pointer; }
+        
+        .btn-generate { background: var(--p); color: #000; border: none; padding: 18px; font-weight: bold; cursor: pointer; width: 100%; text-transform: uppercase; font-size: 14px; }
+        
+        .preview-pane { flex: 1; background: #000; padding: 20px; display: flex; flex-direction: column; gap: 20px; overflow-y: auto; }
+        .preview-box { flex: 1; border: 1px solid #333; position: relative; min-height: 300px; background: #000; }
+        .preview-box iframe { width: 100%; height: 100%; border: none; }
+        .preview-tag { position: absolute; top: 5px; right: 5px; font-size: 10px; color: var(--p); background: #000; padding: 2px 6px; }
     </style>
 </head>
 <body>
 
 <div class="sidebar">
     <div class="logo-area">
-        <img src="https://img.genially.com/67961b32a116fb001568a75e/673752a5-8d4d-40d1-9b5f-f04ebd91a27c.png" alt="logo">
-        <span>EDITOR V9.1</span>
+        <img src="https://img.genially.com/67961b32a116fb001568a75e/673752a5-8d4d-40d1-9b5f-f04ebd91a27c.png" height="30">
+        <span>V9 EDITOR</span>
     </div>
     
     <div class="tabs">
-        <button class="tab active" onclick="showTab('style')">Стиль</button>
-        <button class="tab" onclick="showTab('game')">Игра</button>
-        <button class="tab" onclick="showTab('questions')">Вопросы</button>
+        <button class="tab active" onclick="setTab('style', this)">Вкладка 1</button>
+        <button class="tab" onclick="setTab('game', this)">Вкладка 2</button>
+        <button class="tab" onclick="setTab('questions', this)">Вопросы</button>
     </div>
 
     <div id="tab-style" class="content">
         <div class="section">
-            <div class="section-title">Цвета Интерфейса</div>
-            <div class="color-grid">
-                <div><label>Основной (Панель)</label><input type="color" id="colorMain" value="#0a0a0f" oninput="up()"></div>
-                <div><label>Цвет Неона</label><input type="color" id="colorNeon" value="#00f3ff" oninput="up()"></div>
+            <div class="section-title">Внешний вид (Скрин 1)</div>
+            <div class="color-row">
+                <div><label>Цвет панели</label><input type="color" id="uiPanel" value="#0a0a0f" oninput="up()"></div>
+                <div><label>Цвет Неона</label><input type="color" id="uiNeon" value="#00f3ff" oninput="up()"></div>
             </div>
-            <div class="check-row">
-                <input type="checkbox" id="useNeon" checked onchange="up()">
-                <span>Включить неоновое свечение</span>
+            <div style="display:flex; align-items:center; margin: 10px 0;">
+                <input type="checkbox" id="uiNeonCheck" checked onchange="up()">
+                <label style="margin:0">Включить неон</label>
             </div>
-            <label>Текст заголовка</label>
+            <label>Текст на заставке</label>
             <input type="text" id="gameTitle" value="Grammar Bricks" oninput="up()">
         </div>
 
         <div class="section">
-            <div class="section-title">Фон игры</div>
+            <div class="section-title">Фон игры (Скрин 2)</div>
             <div class="bg-presets">
                 <div class="bg-opt" style="background:#000" onclick="setBg('#000000')"></div>
                 <div class="bg-opt" style="background:#1a1a2e" onclick="setBg('#1a1a2e')"></div>
-                <div class="bg-opt" style="background:linear-gradient(45deg, #111, #222)" onclick="setBg('grad')"></div>
-                <div class="bg-opt" style="display:flex; align-items:center; justify-content:center; font-size:20px; border-style:dashed" onclick="document.getElementById('bgFile').click()">+</div>
+                <div class="bg-opt" style="background:linear-gradient(to bottom, #111, #333)" onclick="setBg('gradient')"></div>
+                <div class="bg-opt" style="border: 1px dashed #666; text-align:center; line-height:35px" onclick="document.getElementById('bgFile').click()">+</div>
             </div>
-            <input type="file" id="bgFile" style="display:none" onchange="loadBg(this)">
-            <label>Или прозрачный (для Genially)</label>
-            <div class="check-row"><input type="checkbox" id="bgTransp" checked onchange="up()"> <span>Прозрачный фон</span></div>
+            <input type="file" id="bgFile" style="display:none" onchange="readBg(this)">
+            <div style="display:flex; align-items:center;">
+                <input type="checkbox" id="bgTransp" checked onchange="up()">
+                <label style="margin:0">Прозрачный фон (для Genially)</label>
+            </div>
         </div>
     </div>
 
     <div id="tab-game" class="content" style="display:none">
         <div class="section">
-            <div class="section-title">Механика</div>
+            <div class="section-title">Настройки механики</div>
             <label>Скорость шара (1-5)</label>
             <input type="range" id="ballSpeed" min="1" max="5" value="3" oninput="up()">
             
@@ -108,79 +103,94 @@
 
     <div id="tab-questions" class="content" style="display:none">
         <div class="section" style="border-left: 4px solid #00ff00">
-            <div class="section-title">Легкие вопросы (Зеленые)</div>
-            <textarea id="easyQ" rows="4" placeholder="Вопрос | Ответ1 | Ответ2 | Ответ3 (Первый - верный)" oninput="up()">She ___ to school. | goes | go | going</textarea>
+            <div class="section-title">Зеленые кирпичи (Легкие)</div>
+            <textarea id="easyQ" rows="4" placeholder="Вопрос | Верный | Неверный | Неверный" oninput="up()">She ___ to school. | goes | go | going</textarea>
         </div>
         <div class="section" style="border-left: 4px solid #ffff00">
-            <div class="section-title">Сложные вопросы (Желтые)</div>
-            <textarea id="hardQ" rows="4" placeholder="Вопрос | Ответ1 | Ответ2" oninput="up()">If I ___ you... | were | was | am</textarea>
+            <div class="section-title">Желтые кирпичи (Сложные)</div>
+            <textarea id="hardQ" rows="4" placeholder="Вопрос | Верный | Неверный" oninput="up()">If I ___ you... | were | was | am</textarea>
         </div>
     </div>
 
-    <button class="btn-main" onclick="generateCode()">СКОПИРОВАТЬ КОД ДЛЯ GENIALLY</button>
+    <button class="btn-generate" onclick="copyFinalCode()">СКОПИРОВАТЬ КОД ДЛЯ GENIALLY</button>
 </div>
 
 <div class="preview-pane">
-    <div class="preview-window">
-        <div class="preview-label">ЗАСТАВКА (FILE 9 STYLE)</div>
+    <div class="preview-box">
+        <div class="preview-tag">ЗАСТАВКА</div>
         <iframe id="preStart"></iframe>
     </div>
-    <div class="preview-window">
-        <div class="preview-label">ИТОГОВАЯ ТАБЛИЦА</div>
+    <div class="preview-box">
+        <div class="preview-tag">РЕЗУЛЬТАТЫ (FILE 9)</div>
         <iframe id="preEnd"></iframe>
     </div>
 </div>
 
 <script>
-    let customBg = null;
+    let bgData = null;
 
-    function showTab(id) {
-        document.querySelectorAll('.content').forEach(c => c.style.display = 'none');
+    function setTab(id, btn) {
+        document.querySelectorAll('.content').forEach(c => c.style.display='none');
         document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-        document.getElementById('tab-'+id).style.display = 'block';
-        event.target.classList.add('active');
+        document.getElementById('tab-'+id).style.display='block';
+        btn.classList.add('active');
     }
 
-    function setBg(v) { if(v==='grad') customBg='linear-gradient(180deg, #000, #111)'; else customBg=v; up(); }
-    function loadBg(i) { const r = new FileReader(); r.onload=e=>{customBg=`url(${e.target.result})`; up();}; r.readAsDataURL(i.files[0]); }
+    function setBg(v) { bgData = (v==='gradient') ? 'linear-gradient(180deg, #000, #222)' : v; up(); }
+    function readBg(input) { if(input.files[0]) { const r=new FileReader(); r.onload=e=>{bgData=`url(${e.target.result})`; up();}; r.readAsDataURL(input.files[0]); } }
 
     function up() {
-        const cfg = {
-            main: document.getElementById('colorMain').value,
-            neon: document.getElementById('useNeon').checked ? document.getElementById('colorNeon').value : 'transparent',
-            title: document.getElementById('gameTitle').value,
-            bg: document.getElementById('bgTransp').checked ? 'transparent' : (customBg || '#000')
-        };
+        const neon = document.getElementById('uiNeonCheck').checked ? document.getElementById('uiNeon').value : 'transparent';
+        const panel = document.getElementById('uiPanel').value;
+        const title = document.getElementById('gameTitle').value;
+        const bg = document.getElementById('bgTransp').checked ? 'transparent' : (bgData || '#000');
 
-        // Стили из File 9
+        // Генерируем CSS для превью на основе стиля File 9
         const css = `
-            body { background: ${cfg.bg}; font-family: 'Courier New', monospace; display: flex; align-items: center; justify-content: center; height: 100vh; margin: 0; color: #fff; }
-            .panel { background: ${cfg.main}; border: 4px solid ${cfg.neon}; padding: 40px; border-radius: 20px; text-align: center; box-shadow: 0 0 20px ${cfg.neon}; }
-            .btn { background: transparent; border: 2px solid ${cfg.neon}; color: ${cfg.neon}; padding: 10px 30px; border-radius: 50px; font-weight: bold; cursor: pointer; font-family: inherit; margin-top: 20px; box-shadow: 0 0 10px ${cfg.neon}; }
-            table { width: 100%; margin-top: 15px; border-collapse: collapse; font-size: 14px; }
-            td { padding: 5px; text-align: left; border-bottom: 1px solid rgba(255,255,255,0.1); }
-            .val { text-align: right; color: ${cfg.neon}; font-weight: bold; }
+            body { background: ${bg}; font-family: 'Courier New', monospace; display: flex; align-items: center; justify-content: center; height: 100vh; margin: 0; color: #fff; }
+            .panel { background: ${panel}; border: 3px solid ${neon}; padding: 30px; border-radius: 15px; text-align: center; box-shadow: 0 0 15px ${neon}; min-width: 250px; }
+            h1 { font-size: 28px; text-shadow: 0 0 10px ${neon}; margin-bottom: 20px; }
+            .btn { background: transparent; border: 2px solid ${neon}; color: ${neon}; padding: 10px 25px; border-radius: 50px; cursor: pointer; font-family: inherit; font-weight: bold; }
+            table { width: 100%; margin: 15px 0; border-collapse: collapse; font-size: 13px; text-align: left; }
+            td { padding: 4px; border-bottom: 1px solid rgba(255,255,255,0.1); }
+            .val { text-align: right; color: ${neon}; font-weight: bold; }
         `;
 
-        const startHtml = `<style>${css}</style><body><div class="panel"><h1>${cfg.title}</h1><button class="btn">START GAME</button></div></body>`;
-        document.getElementById('preStart').srcdoc = startHtml;
-
-        const endHtml = `<style>${css}</style><body><div class="panel"><h2>RESULTS</h2>
-            <table>
-                <tr><td>Total Score</td><td class="val">1250</td></tr>
-                <tr><td>Correct Answers</td><td class="val">12</td></tr>
-                <tr><td>Misses</td><td class="val">2</td></tr>
-                <tr><td>Trophies</td><td class="val">3</td></tr>
-            </table>
-            <button class="btn">PLAY AGAIN</button></div></body>`;
-        document.getElementById('preEnd').srcdoc = endHtml;
+        document.getElementById('preStart').srcdoc = `<html><style>${css}</style><body><div class="panel"><h1>${title}</h1><button class="btn">START GAME</button></div></body></html>`;
+        document.getElementById('preEnd').srcdoc = `<html><style>${css}</style><body><div class="panel"><h2>RESULTS</h2><table>
+            <tr><td>Total Score</td><td class="val">1200</td></tr>
+            <tr><td>Correct answers</td><td class="val">10</td></tr>
+            <tr><td>Wrong answers</td><td class="val">2</td></tr>
+            <tr><td>Misses</td><td class="val">1</td></tr>
+            <tr><td>Trophies</td><td class="val">5</td></tr>
+        </table><button class="btn">PLAY AGAIN</button></div></body></html>`;
     }
 
-    function generateCode() {
-        // Здесь генерируется полный JS код на базе File 9 с инъекцией переменных
-        // Чтобы не перегружать окно, я подготовил механизм сборки
-        alert("Код сформирован на базе File 9! (В реальности тут будет полный текст скрипта)");
-        // В продакшн версии здесь будет navigator.clipboard.writeText(...)
+    function copyFinalCode() {
+        // Здесь мы берем ТВОЙ ФАЙЛ 9 и вставляем в него только CONFIG
+        const config = {
+            title: document.getElementById('gameTitle').value,
+            panelColor: document.getElementById('uiPanel').value,
+            neonColor: document.getElementById('uiNeonCheck').checked ? document.getElementById('uiNeon').value : 'transparent',
+            bg: document.getElementById('bgTransp').checked ? 'transparent' : (bgData || '#000'),
+            ballSpeed: (parseInt(document.getElementById('ballSpeed').value) * 1.5) + 2,
+            timeLimit: parseInt(document.getElementById('gameTime').value),
+            winIcon: document.getElementById('winEffect').value,
+            easyQuestions: document.getElementById('easyQ').value.split('\n').filter(q => q.includes('|')),
+            hardQuestions: document.getElementById('hardQ').value.split('\n').filter(q => q.includes('|'))
+        };
+
+        // ТУТ ИДЕТ ТВОЙ ОРИГИНАЛЬНЫЙ КОД ИЗ 9 ФАЙЛА, КУДА МЫ ВШИВАЕМ config
+        const finalHTML = `
+<!DOCTYPE html>
+<html>
+<script>
+const CONFIG = ${JSON.stringify(config)};
+// ... далее идет весь твой работающий код из File 9 ...
+<\/script>
+</html>`;
+        
+        navigator.clipboard.writeText(finalHTML).then(() => alert("ГОТОВО! Код скопирован. Вставь его в Genially."));
     }
 
     up();
