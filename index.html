@@ -382,9 +382,9 @@ max-width:none; /* не ограничиваем */
       text-align:left;
       font-family: var(--mono);
       color: rgba(234,246,255,.92);
-      font-size: 15px;
-      line-height: 1.55;
-      opacity:.95;
+      font-size: 19px;
+      line-height: 1.65;
+      opacity:.700;
     }
 
     .mock-line{
@@ -1192,9 +1192,13 @@ function buildConfig(){
       btnNeon: v("btnNeon") || "#00ff66",
 
       qFont: v("startFont") || "Courier New",
-      qTextColor: "#ffffff",
-      qTextSize: 22,
-    },
+qTextColor: "#ffffff",
+qTextSize: 22,
+
+startInfoSize: 19,
+endStatsSize: 19,
+endStatsWeight: 800,
+ },
     gameplay: {
       lives: clamp(v("lives"), 1, 9),
       timeLimit: clamp(v("timeLimit"), 10, 180),
@@ -1322,16 +1326,17 @@ function buildGameHtml(){
     text-shadow: ${cfg.ui.startNeonOn ? `0 0 15px var(--neon), 0 0 32px rgba(0,255,255,.25)` : `0 0 10px rgba(255,255,255,.20)`};
   }
 
-  .start-lines{
-    width:100%;
-    max-width: 640px;
-    margin-top: 6px;
-    text-align:left;
-    font-family:${cssFont(cfg.ui.startFont)};
-    font-size: 16px;
-    line-height: 1.55;
-    color: rgba(234,246,255,.92);
-  }
+.start-lines{
+  width:100%;
+  max-width: 640px;
+  margin-top: 6px;
+  text-align:left;
+  font-family:${cssFont(cfg.ui.startFont)};
+  font-size: ${cfg.ui.startInfoSize}px; /* было 16px */
+  line-height: 1.65;                   /* было 1.55 */
+  font-weight: 700;                    /* добавили жирность */
+  color: rgba(234,246,255,.92);
+}
   .start-line{
     display:flex;
     gap:12px;
@@ -1459,11 +1464,41 @@ function buildGameHtml(){
   .q-theme-green .answer-dot{ background: var(--green); box-shadow: 0 0 8px var(--green); }
   .q-theme-yellow .answer-dot{ background: var(--yellow); box-shadow: 0 0 8px var(--yellow); }
 
-  .stats-table{ width:100%; margin: 15px auto; border-collapse: collapse; font-size: 16px; text-align:left; color:#ddd; }
-  .stats-table td{ padding: 8px 10px; border-bottom: 1px solid rgba(255,255,255,.20); }
-  .stats-table td:last-child{ text-align:right; font-weight:bold; color:#fff; }
-  .total-row td{ font-size: 22px; color: var(--neon); text-shadow: 0 0 10px var(--neon); border-top: 2px solid var(--neon) !important; padding-top: 15px; font-weight: bold; }
-  #rank-display{ font-size: 26px; color:#FFD700; text-shadow: 0 0 20px #FFD700; margin: 15px 0; font-weight: 900; letter-spacing: 2px; text-transform: uppercase; }
+.stats-table{
+width:100%;
+margin: 15px auto;
+border-collapse: collapse;
+font-size: 19px; /* было 16px */
+text-align:left;
+color:#eaf6ff; /* было #ddd */
+font-weight: 800; /* добавили жирность */
+}
+.stats-table td{
+padding: 10px 10px; /* было 8px 10px */
+border-bottom: 1px solid rgba(255,255,255,.20);
+}
+.stats-table td:last-child{
+text-align:right;
+font-weight: 900; /* было bold */
+color:#fff;
+}
+.total-row td{
+font-size: 26px; /* было 22px */
+color: var(--neon);
+text-shadow: 0 0 12px var(--neon);
+border-top: 2px solid var(--neon) !important;
+padding-top: 15px;
+font-weight: 900;
+}
+#rank-display{
+font-size: 30px; /* было 26px */
+color:#FFD700;
+text-shadow: 0 0 22px #FFD700;
+margin: 15px 0;
+font-weight: 900;
+letter-spacing: 2px;
+text-transform: uppercase;
+}
 </style>
 </head>
 <body>
