@@ -1,629 +1,752 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-<meta charset="UTF-8">
-<title>Grammar Bricks Editor Ultimate</title>
-<style>
-    :root {
-        --neon-main: #00f3ff;
-        --bg-dark: #0a0a10;
-        --panel-bg: #14141a;
-        --text-main: #e0e0e0;
-    }
-    body { margin: 0; background: var(--bg-dark); color: var(--text-main); font-family: 'Segoe UI', sans-serif; height: 100vh; display: flex; overflow: hidden; }
-    
-    /* СТИЛИ РЕДАКТОРА */
-    .sidebar { width: 420px; background: var(--panel-bg); border-right: 1px solid #333; display: flex; flex-direction: column; z-index: 10; box-shadow: 5px 0 20px #000; }
-    .logo-area { padding: 15px; background: #000; border-bottom: 2px solid var(--neon-main); display: flex; align-items: center; gap: 10px; }
-    .logo-area img { height: 40px; filter: drop-shadow(0 0 5px var(--neon-main)); }
-    .logo-area span { font-weight: 800; color: #fff; text-shadow: 0 0 10px var(--neon-main); letter-spacing: 1px; }
-    
-    .tabs { display: flex; background: #000; }
-    .tab-btn { flex: 1; background: transparent; border: none; color: #666; padding: 12px 0; cursor: pointer; font-weight: bold; border-bottom: 2px solid transparent; transition: 0.3s; }
-    .tab-btn.active { color: var(--neon-main); border-bottom-color: var(--neon-main); text-shadow: 0 0 8px var(--neon-main); background: #111; }
-    
-    .scroll-content { flex: 1; overflow-y: auto; padding: 15px; }
-    .section { background: rgba(255,255,255,0.03); border: 1px solid #333; border-radius: 6px; padding: 12px; margin-bottom: 15px; }
-    .section-title { color: var(--neon-main); font-size: 11px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px; border-bottom: 1px solid #333; padding-bottom: 4px; }
-    
-    .form-group { margin-bottom: 12px; }
-    label { display: block; font-size: 11px; color: #aaa; margin-bottom: 4px; }
-    input, select, textarea { width: 100%; background: #000; border: 1px solid #444; color: #fff; padding: 6px; border-radius: 4px; box-sizing: border-box; font-family: monospace; font-size: 12px; }
-    textarea { resize: vertical; min-height: 60px; }
-    input:focus, select:focus, textarea:focus { border-color: var(--neon-main); outline: none; box-shadow: 0 0 8px rgba(0,243,255,0.2); }
-    input[type="color"] { height: 30px; padding: 0; cursor: pointer; }
-    
-    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
-    
-    .action-bar { padding: 15px; background: #050505; border-top: 1px solid #333; }
-    .generate-btn { width: 100%; background: linear-gradient(90deg, #00f3ff, #0066ff); color: #000; font-weight: 900; border: none; padding: 15px; cursor: pointer; text-transform: uppercase; letter-spacing: 1px; transition: 0.3s; border-radius: 4px; }
-    .generate-btn:hover { filter: brightness(1.2); box-shadow: 0 0 15px var(--neon-main); }
-    
-    .preview-area { flex: 1; background: #000; position: relative; display: flex; flex-direction: column; }
-    iframe { width: 100%; height: 100%; border: none; }
-    
-    .copyright { font-size: 9px; color: #555; text-align: center; margin-top: 5px; }
-</style>
+    <meta charset="UTF-8">
+    <title>Master Editor: Original Version</title>
+    <style>
+        :root { --p: #00f3ff; --bg: #121212; --panel: #1e1e24; --text: #eee; }
+        body { margin: 0; background: var(--bg); color: var(--text); font-family: 'Segoe UI', sans-serif; display: flex; height: 100vh; overflow: hidden; }
+        
+        /* SIDEBAR */
+        .sidebar { width: 440px; background: var(--panel); border-right: 1px solid #333; display: flex; flex-direction: column; overflow-y: auto; box-shadow: 2px 0 10px rgba(0,0,0,0.5); z-index: 10; }
+        
+        .logo-area { padding: 15px; background: #000; border-bottom: 1px solid var(--p); display: flex; align-items: center; gap: 10px; }
+        .logo-area img { height: 40px; }
+        .logo-area span { font-weight: bold; color: var(--p); letter-spacing: 1px; }
+
+        .tabs { display: flex; background: #111; border-bottom: 1px solid #333; position: sticky; top:0; z-index: 5; }
+        .tab { flex: 1; padding: 12px; background: none; border: none; color: #777; cursor: pointer; border-bottom: 2px solid transparent; font-size: 13px; font-weight: 600; }
+        .tab.active { color: var(--p); border-bottom-color: var(--p); background: rgba(0, 243, 255, 0.05); }
+
+        .content { padding: 15px; }
+        .section { margin-bottom: 20px; border: 1px solid #333; padding: 15px; border-radius: 8px; background: rgba(0,0,0,0.2); }
+        .section-title { font-size: 12px; text-transform: uppercase; color: #888; margin-bottom: 10px; border-bottom: 1px solid #333; padding-bottom: 5px; }
+
+        .control-row { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+        .control-col { flex: 1; }
+        label { display: block; font-size: 11px; color: #aaa; margin-bottom: 4px; }
+        
+        input, select, textarea { width: 100%; background: #000; border: 1px solid #444; color: #fff; padding: 8px; border-radius: 4px; box-sizing: border-box; font-size: 13px; }
+        input[type="color"] { padding: 0; height: 30px; cursor: pointer; }
+        input[type="checkbox"] { width: auto; transform: scale(1.2); }
+        input[type="range"] { -webkit-appearance: none; background: #333; height: 5px; border-radius: 5px; }
+        input[type="range"]::-webkit-slider-thumb { -webkit-appearance: none; width: 15px; height: 15px; background: var(--p); border-radius: 50%; cursor: pointer; }
+
+        /* PREVIEW AREA */
+        .preview-area { flex: 1; display: flex; flex-direction: column; background: #000; padding: 20px; gap: 20px; overflow-y: auto; }
+        .preview-card { border: 1px solid #444; border-radius: 8px; overflow: hidden; display: flex; flex-direction: column; background: #000; box-shadow: 0 0 20px rgba(0,0,0,0.5); position: relative; }
+        .preview-header { padding: 8px 15px; background: #1a1a1a; border-bottom: 1px solid #333; font-size: 12px; color: #aaa; display: flex; justify-content: space-between; align-items: center; }
+        iframe { border: none; width: 100%; height: 100%; display: block; }
+
+        .btn-gen { background: linear-gradient(90deg, #00f3ff, #0066ff); border: none; color: #fff; padding: 15px; font-weight: bold; cursor: pointer; text-transform: uppercase; margin-top: auto; position: sticky; bottom: 0; }
+        .btn-gen:hover { filter: brightness(1.2); }
+
+        .color-palette { display: flex; gap: 5px; margin-top: 5px; }
+        .color-swatch { width: 25px; height: 25px; border-radius: 50%; cursor: pointer; border: 2px solid #333; }
+        .color-swatch:hover { transform: scale(1.1); border-color: #fff; }
+
+        /* Specific Toggles */
+        .toggle-group { background: #111; padding: 5px; border-radius: 20px; display: inline-flex; gap: 5px; }
+        .toggle-btn { border: none; background: transparent; color: #555; padding: 5px 15px; border-radius: 15px; cursor: pointer; font-size: 12px; }
+        .toggle-btn.active { background: #333; color: #fff; }
+
+        /* Level Items */
+        .level-item { border-left: 3px solid #00f3ff; padding-left: 10px; margin-bottom: 15px; background: rgba(255,255,255,0.02); padding: 10px; }
+        .trash-btn { float: right; cursor: pointer; color: #f55; background: none; border: none; }
+    </style>
 </head>
 <body>
 
 <div class="sidebar">
     <div class="logo-area">
-        <img src="https://img.genially.com/67961b32a116fb001568a75e/673752a5-8d4d-40d1-9b5f-f04ebd91a27c.png">
-        <span>GRAMMAR BRICKS</span>
-    </div>
-    
-    <div class="tabs">
-        <button class="tab-btn active" onclick="setTab('visual')">ВИЗУАЛ</button>
-        <button class="tab-btn" onclick="setTab('game')">ИГРА</button>
-        <button class="tab-btn" onclick="setTab('tasks')">ЗАДАНИЯ</button>
-        <button class="tab-btn" onclick="setTab('audio')">ЗВУК</button>
+        <img src="https://img.genially.com/67961b32a116fb001568a75e/673752a5-8d4d-40d1-9b5f-f04ebd91a27c.png" alt="Logo">
+        <span>BRICKS EDITOR</span>
     </div>
 
-    <div id="tab-visual" class="scroll-content">
+    <div class="tabs">
+        <button class="tab active" onclick="setTab('main')">Главная</button>
+        <button class="tab" onclick="setTab('questions')">Вопросы</button>
+        <button class="tab" onclick="setTab('levels')">Уровни</button>
+        <button class="tab" onclick="setTab('audio')">Аудио</button>
+    </div>
+
+    <div id="tab-main" class="content">
         <div class="section">
-            <div class="section-title">Главный экран</div>
-            <div class="form-group"><label>Заголовок игры</label><input type="text" id="inp-title" value="Grammar Bricks"></div>
-            <div class="grid-2">
-                <div class="form-group"><label>Шрифт</label><select id="inp-fontTitle"><option value="'Courier New'">Courier</option><option value="Arial">Arial</option><option value="'Comic Sans MS'">Comic Sans</option><option value="Verdana">Verdana</option></select></div>
-                <div class="form-group"><label>Размер</label><input type="number" id="inp-sizeTitle" value="32"></div>
+            <div class="section-title">Начальный Экран</div>
+            <div class="control-row">
+                <div class="control-col">
+                    <label>Заголовок</label>
+                    <input type="text" id="gameTitle" value="Grammar Bricks" oninput="up()">
+                </div>
             </div>
-            <div class="grid-2">
-                <div class="form-group"><label>Цвет текста</label><input type="color" id="inp-colTitle" value="#ffffff"></div>
-                <div class="form-group"><label>Цвет неона</label><input type="color" id="inp-neonTitle" value="#00ffff"></div>
+            <div class="control-row">
+                 <div class="control-col">
+                    <label>Шрифт заголовка</label>
+                    <select id="titleFont" onchange="up()">
+                        <option value="'Courier New', monospace">Courier New</option>
+                        <option value="'Comic Sans MS', cursive">Comic Sans</option>
+                        <option value="Arial, sans-serif">Arial</option>
+                        <option value="serif">Times New Roman</option>
+                    </select>
+                 </div>
+                 <div class="control-col">
+                     <label>Размер</label>
+                     <input type="number" id="titleSize" value="48" oninput="up()">
+                 </div>
+            </div>
+            <div class="control-row">
+                <div class="control-col"><label>Цвет текста</label><input type="color" id="titleColor" value="#ffffff" oninput="up()"></div>
+                <div class="control-col" style="flex:0.2"><label>Неон</label><input type="checkbox" id="hasNeon" checked onchange="up()"></div>
+                <div class="control-col"><label>Цвет Неона</label><input type="color" id="neonColor" value="#00ffff" oninput="up()"></div>
             </div>
         </div>
 
         <div class="section">
-            <div class="section-title">Фон игры</div>
-            <div class="form-group"><label>Тип</label>
-                <select id="inp-bgType" onchange="toggleBg()">
-                    <option value="transparent">Прозрачный (для Genially)</option>
-                    <option value="color">Цвет</option>
-                    <option value="image">Своя картинка</option>
-                </select>
+            <div class="section-title">Настройки Игры</div>
+            <div class="control-row">
+                <div class="control-col">
+                    <label>Фон игры</label>
+                    <select id="bgType" onchange="toggleBg(this.value); up()">
+                        <option value="transparent">Прозрачный (для Genially)</option>
+                        <option value="color">Цвет</option>
+                        <option value="image">Картинка</option>
+                    </select>
+                    <div id="bgColorUI" style="display:none; margin-top:5px;">
+                        <input type="color" id="bgColor" value="#111111" oninput="up()">
+                        <div class="color-palette">
+                            <div class="color-swatch" style="background:#000" onclick="setBg('#000000')"></div>
+                            <div class="color-swatch" style="background:#1a1a2e" onclick="setBg('#1a1a2e')"></div>
+                            <div class="color-swatch" style="background:#2e1a1a" onclick="setBg('#2e1a1a')"></div>
+                            <div class="color-swatch" style="background:#1a2e1a" onclick="setBg('#1a2e1a')"></div>
+                        </div>
+                    </div>
+                    <input type="file" id="bgFile" style="display:none; margin-top:5px;" onchange="readImg(this)">
+                </div>
             </div>
-            <div id="bg-color-grp" class="form-group" style="display:none"><label>Цвет</label><input type="color" id="inp-bgColor" value="#111111"></div>
-            <div id="bg-img-grp" class="form-group" style="display:none"><label>Файл</label><input type="file" onchange="loadFile(this, 'bg')"></div>
+            <div class="control-row">
+                <div class="control-col">
+                    <label>Скорость шара (1-5)</label>
+                    <input type="range" id="ballSpeed" min="1" max="5" value="3" step="1">
+                </div>
+                <div class="control-col">
+                    <label>Таймер (макс 180с)</label>
+                    <input type="number" id="gameTime" value="90" max="180">
+                </div>
+            </div>
+             <div class="control-row">
+                 <div class="control-col">
+                    <label>Жизни</label>
+                    <input type="number" id="lives" value="3" max="10">
+                 </div>
+                 <div class="control-col">
+                    <label>Цвет шара</label>
+                    <input type="color" id="ballColor" value="#ffffff" oninput="up()">
+                 </div>
+            </div>
+            <div class="control-row">
+                <div class="control-col">
+                    <label>Эффект победы</label>
+                    <select id="winEffect">
+                        <option value="fireworks">🎆 Фейерверк</option>
+                        <option value="bubbles">🫧 Пузырьки</option>
+                        <option value="flowers">🌸 Цветочки</option>
+                        <option value="stars">⭐ Звездочки</option>
+                    </select>
+                </div>
+            </div>
         </div>
         
         <div class="section">
-            <div class="section-title">Финал</div>
-            <div class="form-group"><label>Победа (Текст)</label><input type="text" id="inp-winTxt" value="YOU WIN!"></div>
-            <div class="form-group"><label>Салют</label>
-                <select id="inp-winEff">
-                    <option value="firework">Фейерверк</option>
-                    <option value="bubbles">Пузырьки</option>
-                    <option value="flowers">Цветочки</option>
-                    <option value="stars">Звездочки</option>
-                </select>
+            <div class="section-title">Финальные экраны</div>
+            <label>Текст Победы</label>
+            <input type="text" id="winTxt" value="VICTORY!">
+            <label style="margin-top:5px">Текст Поражения</label>
+            <input type="text" id="loseTxt" value="GAME OVER">
+        </div>
+    </div>
+
+    <div id="tab-questions" class="content" style="display:none">
+        <div class="section" style="border-left: 3px solid #00ff00;">
+            <div class="section-title" style="color:#00ff00">ЗЕЛЕНЫЕ ВОПРОСЫ (ЛЕГКИЕ)</div>
+            <label>Шрифт</label>
+            <select id="qFontEasy" onchange="up()">
+                <option value="'Courier New', monospace">Courier New</option>
+                <option value="'Comic Sans MS', cursive">Comic Sans</option>
+                <option value="Arial, sans-serif">Arial</option>
+            </select>
+            <div class="control-row">
+                <div class="control-col"><label>Размер</label><input type="number" id="qSizeEasy" value="24" oninput="up()"></div>
+                <div class="control-col"><label>Текст</label><input type="color" id="qColEasy" value="#ffffff" oninput="up()"></div>
+                <div class="control-col"><label>Рамка</label><input type="color" id="qNeonEasy" value="#00ff00" oninput="up()"></div>
+            </div>
+        </div>
+
+        <div class="section" style="border-left: 3px solid #ffff00;">
+            <div class="section-title" style="color:#ffff00">ЖЕЛТЫЕ ВОПРОСЫ (СЛОЖНЫЕ)</div>
+            <label>Шрифт</label>
+            <select id="qFontHard" onchange="up()">
+                <option value="'Courier New', monospace">Courier New</option>
+                <option value="'Comic Sans MS', cursive">Comic Sans</option>
+                <option value="Arial, sans-serif">Arial</option>
+            </select>
+            <div class="control-row">
+                <div class="control-col"><label>Размер</label><input type="number" id="qSizeHard" value="20" oninput="up()"></div>
+                <div class="control-col"><label>Текст</label><input type="color" id="qColHard" value="#ffffff" oninput="up()"></div>
+                <div class="control-col"><label>Рамка</label><input type="color" id="qNeonHard" value="#ffff00" oninput="up()"></div>
             </div>
         </div>
     </div>
 
-    <div id="tab-game" class="scroll-content" style="display:none">
+    <div id="tab-levels" class="content" style="display:none">
+        <div id="levels-container"></div>
+        <button onclick="addLevel()" style="width:100%; padding:10px; background:#222; border:1px dashed #555; color:#fff; cursor:pointer">+ Добавить Уровень</button>
+    </div>
+
+    <div id="tab-audio" class="content" style="display:none">
         <div class="section">
-            <div class="grid-2">
-                <div class="form-group"><label>Жизни</label><input type="number" id="inp-lives" value="3"></div>
-                <div class="form-group"><label>Таймер (сек)</label><input type="number" id="inp-time" value="90"></div>
-            </div>
-            <div class="grid-2">
-                <div class="form-group"><label>Скорость шара</label><input type="range" id="inp-speed" min="3" max="10" value="5"></div>
-                <div class="form-group"><label>Цвет шара</label><input type="color" id="inp-ballCol" value="#ffffff"></div>
-            </div>
+            <div class="section-title">Загрузка звуков</div>
+            <label>Правильный ответ</label><input type="file" onchange="loadAudio('correct', this)">
+            <label style="margin-top:5px">Неправильный ответ</label><input type="file" onchange="loadAudio('wrong', this)">
+            <label style="margin-top:5px">Победа (Финал)</label><input type="file" onchange="loadAudio('win', this)">
+            <label style="margin-top:5px">Провал (Финал)</label><input type="file" onchange="loadAudio('lose', this)">
         </div>
     </div>
 
-    <div id="tab-tasks" class="scroll-content" style="display:none">
-        <div class="section" style="border-left: 3px solid #0f0;">
-            <div class="section-title" style="color:#0f0">EASY TASKS (Зеленые)</div>
-            <div class="form-group">
-                <label>Вопросы (один на строку)</label>
-                <textarea id="easyQ">She ___ to school.&#10;Opposite of 'Happy'?</textarea>
-            </div>
-            <div class="form-group">
-                <label>Ответы (Верный|Неверный|Неверный)</label>
-                <textarea id="easyA">goes|go|going&#10;Sad|Glad|Joy</textarea>
-            </div>
-            <div class="grid-2">
-                <div class="form-group"><label>Цвет текста</label><input type="color" id="inp-ezCol" value="#ffffff"></div>
-                <div class="form-group"><label>Неон</label><input type="color" id="inp-ezNeon" value="#00ff00"></div>
-            </div>
-        </div>
-
-        <div class="section" style="border-left: 3px solid #ff0;">
-            <div class="section-title" style="color:#ff0">HARD TASKS (Желтые)</div>
-            <div class="form-group">
-                <label>Вопросы (один на строку)</label>
-                <textarea id="hardQ">If I were you, I ___ go.</textarea>
-            </div>
-            <div class="form-group">
-                <label>Ответы (Верный|Неверный|Неверный)</label>
-                <textarea id="hardA">would|will|had</textarea>
-            </div>
-            <div class="grid-2">
-                <div class="form-group"><label>Цвет текста</label><input type="color" id="inp-hdCol" value="#ffffff"></div>
-                <div class="form-group"><label>Неон</label><input type="color" id="inp-hdNeon" value="#ffff00"></div>
-            </div>
-        </div>
-    </div>
-
-    <div id="tab-audio" class="scroll-content" style="display:none">
-        <div class="section">
-            <div class="form-group"><label>Фоновая музыка</label><input type="file" onchange="loadFile(this, 'bgm')"></div>
-            <div class="form-group"><label>Правильный ответ</label><input type="file" onchange="loadFile(this, 'cor')"></div>
-            <div class="form-group"><label>Ошибка</label><input type="file" onchange="loadFile(this, 'err')"></div>
-            <div class="form-group"><label>Победа</label><input type="file" onchange="loadFile(this, 'win')"></div>
-            <div class="form-group"><label>Провал</label><input type="file" onchange="loadFile(this, 'lose')"></div>
-        </div>
-    </div>
-
-    <div class="action-bar">
-        <button class="generate-btn" onclick="generate()">СКОПИРОВАТЬ КОД</button>
-        <div class="copyright">© Все права принадлежат Башлыковой Оксане Михайловне</div>
-    </div>
+    <button class="btn-gen" onclick="generateCode()">СКОПИРОВАТЬ КОД ДЛЯ GENIALLY</button>
 </div>
 
 <div class="preview-area">
-    <iframe id="previewFrame"></iframe>
+    <div class="preview-card" style="height: 300px;">
+        <div class="preview-header">
+            <span>СТАРТОВЫЙ ЭКРАН</span>
+        </div>
+        <iframe id="frameStart"></iframe>
+    </div>
+
+    <div class="preview-card" style="height: 300px;">
+        <div class="preview-header">
+            <span>ОКНО ВОПРОСА</span>
+            <div class="toggle-group">
+                <button class="toggle-btn active" onclick="setQMode('easy', this)">EASY (GREEN)</button>
+                <button class="toggle-btn" onclick="setQMode('hard', this)">HARD (YELLOW)</button>
+            </div>
+        </div>
+        <iframe id="frameQ"></iframe>
+    </div>
 </div>
 
-<script type="text/template" id="game-template">
+<script>
+// --- STATE & DATA ---
+let levels = [{
+    easyQ: "She ___ to school.\nI ___ apples.",
+    easyA: "goes|go|going\nlike|likes|liking",
+    hardQ: "If I ___ you...\nShe ___ seen it.",
+    hardA: "were|was|am\nhad|has|have"
+}];
+let audioData = { correct:null, wrong:null, win:null, lose:null };
+let bgImage = null;
+let qPreviewMode = 'easy';
+
+// --- INITIALIZATION ---
+function init() {
+    renderLevels();
+    up();
+}
+
+function setTab(id) {
+    document.querySelectorAll('.content').forEach(d => d.style.display='none');
+    document.getElementById('tab-'+id).style.display='block';
+    document.querySelectorAll('.tab').forEach(b => b.classList.remove('active'));
+    event.target.classList.add('active');
+}
+
+function toggleBg(val) {
+    document.getElementById('bgColorUI').style.display = val === 'color' ? 'block' : 'none';
+    document.getElementById('bgFile').style.display = val === 'image' ? 'block' : 'none';
+}
+function setBg(c) { document.getElementById('bgColor').value = c; up(); }
+
+function setQMode(mode, btn) {
+    qPreviewMode = mode;
+    document.querySelectorAll('.toggle-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    up();
+}
+
+// --- LOGIC ---
+function addLevel() {
+    levels.push({ easyQ: "", easyA: "", hardQ: "", hardA: "" });
+    renderLevels();
+}
+function removeLevel(i) {
+    if(levels.length>1) { levels.splice(i,1); renderLevels(); }
+}
+function renderLevels() {
+    const c = document.getElementById('levels-container');
+    c.innerHTML = '';
+    levels.forEach((l, i) => {
+        c.innerHTML += `
+        <div class="level-item">
+            <button class="trash-btn" onclick="removeLevel(${i})">🗑️</button>
+            <div style="font-weight:bold; margin-bottom:5px">Уровень ${i+1}</div>
+            <label style="color:#0f0">Зеленые вопросы (Easy)</label>
+            <textarea rows="3" oninput="levels[${i}].easyQ=this.value">${l.easyQ}</textarea>
+            <label>Ответы</label>
+            <textarea rows="2" oninput="levels[${i}].easyA=this.value">${l.easyA}</textarea>
+            
+            <label style="color:#ff0; margin-top:10px">Желтые вопросы (Hard)</label>
+            <textarea rows="3" oninput="levels[${i}].hardQ=this.value">${l.hardQ}</textarea>
+            <label>Ответы</label>
+            <textarea rows="2" oninput="levels[${i}].hardA=this.value">${l.hardA}</textarea>
+        </div>`;
+    });
+}
+
+function readImg(input) {
+    if(input.files[0]) {
+        const r = new FileReader();
+        r.onload = e => { bgImage = e.target.result; up(); };
+        r.readAsDataURL(input.files[0]);
+    }
+}
+function loadAudio(key, input) {
+    if(input.files[0]) {
+        const r = new FileReader();
+        r.onload = e => { audioData[key] = e.target.result; alert('Звук загружен!'); };
+        r.readAsDataURL(input.files[0]);
+    }
+}
+
+// --- PREVIEWS (THE CORE) ---
+function up() {
+    // Collect settings
+    const title = document.getElementById('gameTitle').value;
+    const titleFont = document.getElementById('titleFont').value;
+    const titleSize = document.getElementById('titleSize').value;
+    const titleColor = document.getElementById('titleColor').value;
+    const hasNeon = document.getElementById('hasNeon').checked;
+    const neonColor = hasNeon ? document.getElementById('neonColor').value : 'rgba(0,0,0,0)';
+    
+    const bgType = document.getElementById('bgType').value;
+    const bgCSS = bgType==='transparent' ? 'transparent' : (bgType==='color' ? document.getElementById('bgColor').value : `url('${bgImage}') center/cover`);
+
+    const qFont = qPreviewMode==='easy' ? document.getElementById('qFontEasy').value : document.getElementById('qFontHard').value;
+    const qSize = qPreviewMode==='easy' ? document.getElementById('qSizeEasy').value : document.getElementById('qSizeHard').value;
+    const qCol = qPreviewMode==='easy' ? document.getElementById('qColEasy').value : document.getElementById('qColHard').value;
+    const qNeon = qPreviewMode==='easy' ? document.getElementById('qNeonEasy').value : document.getElementById('qNeonHard').value;
+
+    // PREVIEW: START SCREEN (Original Design)
+    const cssStart = `
+        body { margin:0; height:100vh; display:flex; align-items:center; justify-content:center; background:${bgCSS}; font-family:${titleFont}; }
+        .panel { 
+            text-align: center; 
+            padding: 40px; 
+            border: 4px solid ${neonColor}; 
+            border-radius: 20px; 
+            box-shadow: 0 0 30px ${neonColor}, inset 0 0 20px rgba(0,0,0,0.5);
+            background: rgba(0,0,0,0.8);
+            min-width: 300px;
+        }
+        h1 { margin:0 0 30px; font-size:${titleSize}px; color:${titleColor}; text-shadow: 0 0 15px ${neonColor}; }
+        .btn {
+            background: transparent;
+            border: 2px solid ${neonColor};
+            color: ${neonColor};
+            padding: 15px 40px;
+            font-size: 24px;
+            font-family: inherit;
+            font-weight: bold;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 0 15px ${neonColor};
+        }
+    `;
+    document.getElementById('frameStart').srcdoc = `<html><style>${cssStart}</style><body><div class="panel"><h1>${title}</h1><button class="btn">START</button></div></body></html>`;
+
+    // PREVIEW: QUESTION (Original Design)
+    const cssQ = `
+        body { margin:0; height:100vh; display:flex; align-items:center; justify-content:center; background:#111; font-family:${qFont}; }
+        .q-box {
+            width: 80%;
+            border: 3px solid ${qNeon};
+            background: #000;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 0 25px ${qNeon};
+            color: ${qCol};
+            text-align: center;
+        }
+        .q-text { font-size: ${qSize}px; margin-bottom: 20px; }
+        .ans { 
+            background: rgba(255,255,255,0.1); 
+            border: 1px solid #555; 
+            padding: 10px; 
+            margin: 5px 0; 
+            border-radius: 5px; 
+            color: #fff;
+        }
+    `;
+    document.getElementById('frameQ').srcdoc = `<html><style>${cssQ}</style><body><div class="q-box"><div class="q-text">${qPreviewMode==='easy' ? 'Easy Question Example?' : 'Hard Question Example?'}</div><div class="ans">Answer A</div><div class="ans">Answer B</div></div></body></html>`;
+}
+
+// --- GENERATOR ---
+function generateCode() {
+    // Gather ALL Data
+    const cfg = {
+        title: document.getElementById('gameTitle').value,
+        titleFont: document.getElementById('titleFont').value,
+        titleSize: document.getElementById('titleSize').value,
+        titleColor: document.getElementById('titleColor').value,
+        neon: document.getElementById('hasNeon').checked ? document.getElementById('neonColor').value : 'rgba(0,0,0,0)',
+        
+        bgType: document.getElementById('bgType').value,
+        bgVal: document.getElementById('bgType').value==='color' ? document.getElementById('bgColor').value : (bgImage || ''),
+        
+        speed: parseInt(document.getElementById('ballSpeed').value) * 2 + 1, // Map 1-5 to 3-11
+        time: Math.min(180, parseInt(document.getElementById('gameTime').value)),
+        lives: document.getElementById('lives').value,
+        ballC: document.getElementById('ballColor').value,
+        winEff: document.getElementById('winEffect').value,
+        winTxt: document.getElementById('winTxt').value,
+        loseTxt: document.getElementById('loseTxt').value,
+
+        easy: { font: document.getElementById('qFontEasy').value, size: document.getElementById('qSizeEasy').value, col: document.getElementById('qColEasy').value, neon: document.getElementById('qNeonEasy').value },
+        hard: { font: document.getElementById('qFontHard').value, size: document.getElementById('qSizeHard').value, col: document.getElementById('qColHard').value, neon: document.getElementById('qNeonHard').value }
+    };
+
+    // Clean levels
+    const cleanLevels = levels.map(l => ({
+        eq: l.easyQ.split('\n').filter(x=>x), ea: l.easyA.split('\n').filter(x=>x),
+        hq: l.hardQ.split('\n').filter(x=>x), ha: l.hardA.split('\n').filter(x=>x)
+    }));
+
+    // The Game Code (File 9 Reconstruction with Variable Injection)
+    const gameCode = `
 <!DOCTYPE html>
-<html lang="ru">
+<html>
 <head>
 <meta charset="UTF-8">
 <style>
-    body, html { margin: 0; padding: 0; width: 100%; height: 100%; overflow: hidden; background: transparent; font-family: {{TITLE_FONT}}, monospace; user-select: none; }
-    #game-container { position: relative; width: 100%; height: 100%; display: flex; justify-content: center; align-items: center; }
+    body, html { margin:0; padding:0; width:100%; height:100%; overflow:hidden; background:transparent; font-family:${cfg.titleFont}; user-select:none; }
+    #game-container { position:relative; width:100%; height:100%; display:flex; justify-content:center; align-items:center; }
     
-    .bg-layer { position: absolute; top:0; left:0; width:100%; height:100%; z-index:-1; {{BG_STYLE}} }
+    /* BACKGROUND LOGIC */
+    .bg-layer { position:absolute; top:0; left:0; width:100%; height:100%; z-index:-1; }
+    ${cfg.bgType==='color' ? `.bg-layer{background:${cfg.bgVal}}` : (cfg.bgType==='image' ? `.bg-layer{background:url('${cfg.bgVal}') center/cover}` : '')}
 
-    /* ANIMATIONS */
-    .shake { animation: s 0.4s both; }
-    .shake-s { animation: ss 0.2s both; }
-    @keyframes s { 10%,90%{transform:translate3d(-5px,0,0)} 20%,80%{transform:translate3d(5px,0,0)} 30%,50%,70%{transform:translate3d(-10px,0,0)} 40%,60%{transform:translate3d(10px,0,0)} }
-    @keyframes ss { 0%{transform:translate(0,0)} 25%{transform:translate(2px,2px)} 50%{transform:translate(-2px,-2px)} 75%{transform:translate(2px,-2px)} 100%{transform:translate(0,0)} }
+    canvas { display:block; }
+    .hidden { display:none !important; }
+    .overlay { position:absolute; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.85); z-index:100; display:flex; justify-content:center; align-items:center; }
 
-    canvas { display: block; width: 100%; height: 100%; border-radius: 12px; border: 2px solid rgba(0, 255, 255, 0.1); }
-    .overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.85); backdrop-filter: blur(4px); display: flex; justify-content: center; align-items: center; z-index: 20; transition: opacity 0.3s; }
-    .overlay.win-mode { background: rgba(0, 0, 0, 0.3) !important; backdrop-filter: none !important; }
-    .hidden { opacity: 0; pointer-events: none; z-index: -1 !important; }
-
-    .neon-panel {
-        background: rgba(10, 10, 15, 0.96);
-        border: 2px solid {{NEON_TITLE}}; 
-        box-shadow: 0 0 25px {{NEON_TITLE}}, inset 0 0 20px rgba(0,0,0,0.5);
-        padding: 30px; border-radius: 20px; color: #fff; text-align: center; max-width: 600px; width: 90%;
-        display: flex; flex-direction: column; align-items: center;
+    /* YOUR ORIGINAL STYLES */
+    .panel { 
+        background: rgba(10,10,15,0.95); 
+        border: 4px solid ${cfg.neon}; 
+        padding: 40px; 
+        border-radius: 20px; 
+        text-align: center; 
+        box-shadow: 0 0 30px ${cfg.neon}, inset 0 0 20px rgba(0,0,0,0.5);
+        color: ${cfg.titleColor};
+        min-width: 320px;
     }
-    h1 { margin: 0 0 15px 0; font-family: {{TITLE_FONT}}; font-size: {{TITLE_SIZE}}px; color: {{TITLE_COL}}; text-shadow: 0 0 15px {{NEON_TITLE}}; letter-spacing: 2px; }
-    
-    .btn {
-        background: transparent !important; border: 3px solid {{NEON_TITLE}} !important; color: {{NEON_TITLE}} !important;
-        padding: 15px 40px !important; font-size: 22px !important; margin-top: 20px !important; cursor: pointer !important;
-        text-transform: uppercase !important; font-weight: 800 !important; border-radius: 50px !important;
-        box-shadow: 0 0 15px {{NEON_TITLE}}; transition: 0.3s;
+    .panel h1 { margin:0 0 20px; font-size:${cfg.titleSize}px; font-family:${cfg.titleFont}; text-shadow:0 0 15px ${cfg.neon}; }
+    .btn { 
+        background: transparent; 
+        border: 2px solid ${cfg.neon}; 
+        color: ${cfg.neon}; 
+        padding: 12px 35px; 
+        font-size: 24px; 
+        cursor: pointer; 
+        border-radius: 50px; 
+        font-family: inherit; 
+        font-weight: bold; 
+        transition: 0.3s; 
+        margin-top: 20px;
+        box-shadow: 0 0 15px ${cfg.neon};
     }
-    .btn:hover { background: {{NEON_TITLE}} !important; color: #000 !important; transform: scale(1.05); }
+    .btn:hover { background: ${cfg.neon}; color: #000; }
 
-    #hud { position: absolute; top: 10px; left: 0; width: 100%; display: flex; justify-content: center; gap: 15px; color: #fff; font-size: 18px; font-weight: bold; text-shadow: 0 0 5px #000; z-index: 10; pointer-events: none; }
-    .timer-warn { color: #f00; animation: ss 0.5s infinite; }
-
-    /* QUESTIONS */
-    .q-box { padding: 30px !important; min-height: 250px; }
-    .q-txt { font-weight: bold; font-size: 20px; margin-bottom: 20px; line-height: 1.4; }
+    /* QUESTION STYLES (Dynamic based on type) */
+    .q-box { width: 80%; max-width: 500px; padding: 25px; border-radius: 15px; background: #000; text-align: center; border: 3px solid #fff; box-shadow: 0 0 20px #fff; }
+    .ans-btn { display: block; width: 100%; padding: 12px; margin: 8px 0; background: rgba(255,255,255,0.1); border: 1px solid #555; color: #fff; cursor: pointer; border-radius: 8px; transition: 0.2s; font-size:18px; }
+    .ans-btn:hover { background: rgba(255,255,255,0.25); border-color:#fff; }
     
-    /* Green Theme */
-    .theme-easy { border-color: {{EZ_NEON}} !important; box-shadow: 0 0 30px {{EZ_NEON}} !important; }
-    .theme-easy .q-txt { color: {{EZ_COL}}; text-shadow: 0 0 10px {{EZ_NEON}}; }
-    .theme-easy .ans-btn:hover { border-color: {{EZ_NEON}}; box-shadow: 0 0 15px {{EZ_NEON}}; }
-    
-    /* Yellow Theme */
-    .theme-hard { border-color: {{HD_NEON}} !important; box-shadow: 0 0 30px {{HD_NEON}} !important; }
-    .theme-hard .q-txt { color: {{HD_COL}}; text-shadow: 0 0 10px {{HD_NEON}}; }
-    .theme-hard .ans-btn:hover { border-color: {{HD_NEON}}; box-shadow: 0 0 15px {{HD_NEON}}; }
-
-    .ans-grid { display: flex; flex-direction: column; gap: 10px; width: 100%; }
-    .ans-btn {
-        background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.2); color: #fff;
-        padding: 12px 20px; cursor: pointer; border-radius: 8px; text-align: left; font-size: 16px;
-    }
-
-    #music-btn { position: absolute; top: 15px; right: 15px; width: 35px; height: 35px; border: 2px solid {{NEON_TITLE}}; border-radius: 50%; color: {{NEON_TITLE}}; display: flex; justify-content: center; align-items: center; cursor: pointer; z-index: 30; background: rgba(0,0,0,0.5); }
-    #music-btn.off { border-color: #555; color: #555; }
+    #hud { position:absolute; top:10px; width:100%; text-align:center; color:#fff; font-family:'Courier New'; font-weight:bold; font-size:24px; pointer-events:none; z-index:10; text-shadow:2px 2px 2px #000; }
+    .timer-warn { color: #f00; animation: pulse 0.5s infinite; }
+    @keyframes pulse { 0%{opacity:1} 50%{opacity:0.5} 100%{opacity:1} }
+    .shake { animation: shake 0.4s; }
+    @keyframes shake { 0%,100%{transform:translateX(0)} 25%{transform:translateX(-5px)} 75%{transform:translateX(5px)} }
 </style>
 </head>
 <body>
 <div id="game-container">
     <div class="bg-layer"></div>
-    <canvas id="gc"></canvas>
-    <div id="music-btn" class="off">🎵</div>
+    <canvas id="cvs"></canvas>
+    
     <div id="hud" class="hidden">
-        <span>Score: <b id="sc">0</b></span>
-        <span>Lives: <b id="lv"></b></span>
-        <span>Time: <b id="tm"></b></span>
-        <span>🪙 <b id="tr">0</b></span>
+        SCORE: <span id="sc">0</span> | LIVES: <span id="lv"></span> | TIME: <span id="tm"></span>
     </div>
 
     <div id="start-screen" class="overlay">
-        <div class="neon-panel">
-            <h1>{{TITLE_TXT}}</h1>
-            <p>🟩 Easy Questions<br>🟨 Hard Questions</p>
-            <button class="btn" onclick="startGame()">PLAY</button>
+        <div class="panel">
+            <h1>${cfg.title}</h1>
+            <button class="btn" onclick="startGame()">START</button>
         </div>
     </div>
 
-    <div id="q-modal" class="overlay hidden">
-        <div id="q-panel" class="neon-panel q-box">
-            <div id="q-text" class="q-txt">...</div>
-            <div id="q-list" class="ans-grid"></div>
+    <div id="q-screen" class="overlay hidden">
+        <div id="q-panel" class="q-box">
+            <div id="q-text" style="margin-bottom:20px;"></div>
+            <div id="q-ans"></div>
         </div>
     </div>
 
     <div id="end-screen" class="overlay hidden">
-        <div class="neon-panel">
-            <h1 id="end-title">GAME OVER</h1>
-            <p>Score: <span id="end-score">0</span></p>
-            <button class="btn" onclick="startGame()">RESTART</button>
+        <div class="panel">
+            <h1 id="end-title"></h1>
+            <p style="font-size:20px">SCORE: <span id="end-score"></span></p>
+            <button class="btn" onclick="startGame()">REPLAY</button>
         </div>
     </div>
 </div>
 
 <script>
-    // DATA INJECTION
-    const TASKS = {{TASKS_JSON}};
-    const CFG = {
-        rows: {{ROWS}}, 
-        cols: 7, 
-        lives: {{LIVES}}, 
-        speed: {{SPEED}}, 
-        time: {{TIME}},
-        ballCol: '{{BALL_COL}}',
-        winTxt: '{{WIN_TXT}}',
-        loseTxt: 'GAME OVER',
-        winEff: '{{WIN_EFF}}',
-        colors: { green: '{{EZ_NEON}}', yellow: '{{HD_NEON}}', bonus: '#00BFFF', norm: ['#FF69B4', '#BA55D3', '#FFA500', '#20B2AA'] }
-    };
-    const SND = {
-        bgm: {{SND_BGM}}, cor: {{SND_COR}}, err: {{SND_ERR}}, win: {{SND_WIN}}, lose: {{SND_LOSE}}
-    };
+// CONFIG INJECTION
+const CFG = ${JSON.stringify(cfg)};
+const LEVELS = ${JSON.stringify(cleanLevels)};
+const AUDIO = ${JSON.stringify(audioData)};
 
-    // LOGIC
-    const cvs = document.getElementById('gc'); const ctx = cvs.getContext('2d');
-    let state='START', anim, timerId, acx;
-    let stats={sc:0, lv:CFG.lives, tr:0}, timeLeft=CFG.time;
-    let paddle={x:0, y:0, w:100, h:12}, balls=[], bricks=[], drops=[], parts=[];
-    let curQ=null, curRow=-1, W, H, musOn=false, musObj=null;
+// ENGINE
+const cvs = document.getElementById('cvs');
+const ctx = cvs.getContext('2d');
+let w, h, paddle, ball, bricks=[], particles=[], timer, timeLeft, stats={sc:0, lv:3, lvl:0};
+let state = 'START';
+let audioCtx;
 
-    function initAudio() { if(!acx) acx = new (window.AudioContext||window.webkitAudioContext)(); if(acx.state==='suspended') acx.resume(); }
-    
-    document.getElementById('music-btn').onclick = function() {
-        musOn = !musOn; initAudio();
-        this.className = musOn ? '' : 'off';
-        if(musOn && SND.bgm) { if(!musObj) { musObj=new Audio(SND.bgm); musObj.loop=true; } musObj.play(); }
-        else if(musObj) musObj.pause();
-    };
-
-    function playSnd(type) {
-        if(SND[type]) { new Audio(SND[type]).play(); return; }
-        if(!acx) return;
-        const t=acx.currentTime; const o=acx.createOscillator(); const g=acx.createGain();
-        o.connect(g); g.connect(acx.destination);
-        if(type==='tick') { o.type='triangle'; o.frequency.setValueAtTime(800,t); g.gain.setValueAtTime(0.05,t); o.start(t); o.stop(t+0.1); }
-        else if(type==='cor') { o.frequency.setValueAtTime(600,t); o.frequency.linearRampToValueAtTime(1200,t+0.1); g.gain.value=0.1; o.start(t); o.stop(t+0.2); }
-        else if(type==='err') { o.type='sawtooth'; o.frequency.setValueAtTime(150,t); o.frequency.linearRampToValueAtTime(100,t+0.3); g.gain.value=0.1; o.start(t); o.stop(t+0.3); }
-        else if(type==='bounce') { o.frequency.setValueAtTime(400,t); g.gain.exponentialRampToValueAtTime(0.01,t+0.1); o.start(t); o.stop(t+0.1); }
-    }
-
-    function resize() {
-        const c = document.getElementById('game-container');
-        W = c.clientWidth; H = c.clientHeight;
-        cvs.width = W; cvs.height = H;
-        paddle.y = H - 40; paddle.w = Math.min(200, W*0.25);
-    }
-
-    function initBricks() {
-        bricks=[]; 
-        const ezPool = TASKS.filter(t=>t.lvl==='easy');
-        const hdPool = TASKS.filter(t=>t.lvl==='hard');
-        
-        // Strategy: Fill rows with questions until pool empty
-        let grid = [];
-        for(let r=0; r<CFG.rows; r++) {
-            let row = [];
-            for(let c=0; c<CFG.cols; c++) {
-                let type = 'norm';
-                // Logic to inject questions
-                if(Math.random() < 0.3) {
-                    if(ezPool.length > 0 && Math.random() > 0.5) { type='green'; ezPool.pop(); }
-                    else if(hdPool.length > 0) { type='yellow'; hdPool.pop(); }
-                }
-                // If pool empty but type assigned, fallback to norm
-                if((type==='green' && ezPool.length<0) || (type==='yellow' && hdPool.length<0)) type='norm';
-                
-                let color = type==='norm' ? CFG.colors.norm[Math.floor(Math.random()*4)] : CFG.colors[type];
-                row.push({x:0, y:0, w:0, h:0, t:type, c:color, a:true});
-            }
-            bricks.push(row);
-        }
-        
-        // Layout calculation
-        const bw = W/CFG.cols; const bh = H*0.035;
-        bricks.forEach((row, r) => {
-            row.forEach((b, c) => {
-                b.w=bw-2; b.h=bh; b.x=c*bw+1; b.y=r*(bh+5)+60;
-            });
-        });
-    }
-
-    function update() {
-        if(state!=='PLAY') return;
-        balls.forEach(b => {
-            if(b.mov) {
-                b.x+=b.dx; b.y+=b.dy;
-                if(b.x<b.r || b.x>W-b.r) { b.dx*=-1; playSnd('bounce'); }
-                if(b.y<b.r) { b.dy*=-1; playSnd('bounce'); }
-                if(b.y>H) b.dead=true;
-                
-                // Paddle
-                if(b.y+b.r > paddle.y && b.x>paddle.x && b.x<paddle.x+paddle.w) {
-                    b.dy = -Math.abs(b.dy);
-                    b.dx = ((b.x-(paddle.x+paddle.w/2))/(paddle.w/2))*6;
-                    playSnd('bounce');
-                }
-                
-                // Brick
-                bricks.forEach((row, ri) => row.forEach(bk => {
-                    if(bk.a && b.x>bk.x && b.x<bk.x+bk.w && b.y>bk.y && b.y<bk.y+bk.h) {
-                        b.dy*=-1; 
-                        if(bk.t==='norm') { bk.a=false; stats.sc+=10; playSnd('bounce'); }
-                        else { 
-                            state='Q'; curQ=null; curRow=ri; 
-                            showQ(bk.t);
-                        }
-                    }
-                }));
-            } else { b.x=paddle.x+paddle.w/2; b.y=paddle.y-10; }
-        });
-        balls = balls.filter(b=>!b.dead);
-        if(balls.length===0 && state==='PLAY') {
-            stats.lv--; playSnd('err');
-            if(stats.lv<=0) end(false); else { balls.push({x:0,y:0,r:6,dx:0,dy:0,mov:false}); }
-        }
-        // Win condition check
-        const qLeft = bricks.some(r=>r.some(b=>b.a && (b.t==='green'||b.t==='yellow')));
-        if(!qLeft) end(true);
-        updHUD();
-    }
-
-    function draw() {
-        ctx.clearRect(0,0,W,H);
-        // Particles
-        parts.forEach((p,i) => {
-            p.x+=p.dx; p.y+=p.dy; p.l-=0.02;
-            ctx.globalAlpha=p.l; 
-            if(CFG.winEff==='stars') ctx.fillText('⭐',p.x,p.y);
-            else if(CFG.winEff==='flowers') ctx.fillText('🌸',p.x,p.y);
-            else { ctx.fillStyle=p.c; ctx.beginPath(); ctx.arc(p.x,p.y,p.s,0,7); ctx.fill(); }
-            if(p.l<=0) parts.splice(i,1);
-        });
-        ctx.globalAlpha=1;
-
-        // Paddle
-        ctx.fillStyle='#fff'; ctx.shadowBlur=10; ctx.shadowColor='#0ff';
-        ctx.fillRect(paddle.x, paddle.y, paddle.w, paddle.h); ctx.shadowBlur=0;
-
-        // Bricks
-        bricks.forEach(r => r.forEach(b => {
-            if(!b.a) return;
-            ctx.fillStyle = b.t==='norm' ? 'rgba(255,255,255,0.1)' : b.c;
-            ctx.strokeStyle = b.c; ctx.lineWidth=2;
-            ctx.fillRect(b.x,b.y,b.w,b.h); ctx.strokeRect(b.x,b.y,b.w,b.h);
-            if(b.t!=='norm') { ctx.fillStyle='#000'; ctx.font='bold 16px Arial'; ctx.fillText('?', b.x+b.w/2-4, b.y+b.h/2+5); }
+function initAudio() { if(!audioCtx) audioCtx = new (window.AudioContext||window.webkitAudioContext)(); }
+function playSnd(key) {
+    if(!audioCtx) return;
+    if(audioCtx.state === 'suspended') audioCtx.resume();
+    if(AUDIO[key]) {
+        fetch(AUDIO[key]).then(r=>r.arrayBuffer()).then(d=>audioCtx.decodeAudioData(d, b=>{
+            const s=audioCtx.createBufferSource(); s.buffer=b; s.connect(audioCtx.destination); s.start(0);
         }));
-
-        // Ball
-        ctx.fillStyle=CFG.ballCol;
-        balls.forEach(b => { ctx.beginPath(); ctx.arc(b.x,b.y,b.r,0,7); ctx.fill(); });
+    } else {
+        // Fallback synths
+        const o=audioCtx.createOscillator(), g=audioCtx.createGain();
+        o.connect(g); g.connect(audioCtx.destination);
+        if(key==='hit'){ o.frequency.value=400; o.type='square'; g.gain.value=0.1; o.start(); o.stop(audioCtx.currentTime+0.1); }
+        if(key==='wrong'){ o.frequency.value=150; o.type='sawtooth'; g.gain.value=0.2; o.start(); o.stop(audioCtx.currentTime+0.4); }
     }
+}
 
-    function showQ(type) {
-        const pool = TASKS.filter(t => t.lvl === (type==='green'?'easy':'hard'));
-        const q = pool.length ? pool[Math.floor(Math.random()*pool.length)] : TASKS[0];
-        curQ = q;
-        
-        const modal = document.getElementById('q-modal');
-        const pnl = document.getElementById('q-panel');
-        modal.classList.remove('hidden');
-        pnl.className = 'neon-panel q-box ' + (type==='green'?'theme-easy':'theme-hard');
-        
-        document.getElementById('q-text').innerText = q.q;
-        const lst = document.getElementById('q-list'); lst.innerHTML='';
-        
-        q.opts.forEach((ans, i) => {
-            const btn = document.createElement('div');
-            btn.className = 'ans-btn';
-            btn.innerHTML = ans;
-            btn.onclick = () => ansQ(i);
-            lst.appendChild(btn);
-        });
-    }
+function resize() { 
+    w=cvs.width=document.getElementById('game-container').offsetWidth; 
+    h=cvs.height=document.getElementById('game-container').offsetHeight; 
+    paddle={x:w/2-60, y:h-40, w:120, h:15}; 
+    if(state!=='PLAY') resetBall();
+}
+window.onresize = resize;
 
-    function ansQ(idx) {
-        document.getElementById('q-modal').classList.add('hidden');
-        if(idx === curQ.cor) {
-            playSnd('cor'); stats.sc+=100;
-            bricks[curRow].forEach(b => b.a = false); // Clear row
-        } else {
-            playSnd('err'); stats.lv--; 
-            bricks[curRow].forEach(b => { if(b.t!=='norm') { b.t='norm'; b.c='#666'; } });
-        }
-        if(stats.lv<=0) end(false); else state='PLAY';
-    }
-
-    function end(win) {
-        state = win?'WIN':'END'; clearInterval(timerId);
-        document.getElementById('hud').classList.add('hidden');
-        document.getElementById('end-screen').classList.remove('hidden');
-        const t = document.getElementById('end-title');
-        t.innerText = win ? CFG.winTxt : CFG.loseTxt;
-        t.style.color = win ? '#0f0' : '#f00';
-        document.getElementById('end-score').innerText = stats.sc;
-        playSnd(win?'win':'lose');
-        if(win) setInterval(() => {
-            for(let i=0; i<10; i++) parts.push({
-                x:Math.random()*W, y:Math.random()*H, dx:(Math.random()-0.5)*5, dy:(Math.random()-0.5)*5,
-                l:1, s:Math.random()*5+2, c:'hsl('+Math.random()*360+',100%,50%)'
-            });
-        }, 300);
-    }
-
-    function updHUD() {
-        document.getElementById('sc').innerText = stats.sc;
-        document.getElementById('lv').innerText = '❤️'.repeat(stats.lv);
-        const tm = document.getElementById('tm');
-        tm.innerText = timeLeft;
-        tm.className = timeLeft<=10 ? 'timer-warn' : '';
-    }
-
-    window.onmousemove = e => paddle.x = e.clientX - 60;
-    window.onclick = () => { if(state==='PLAY' && !balls[0].mov) { balls[0].mov=true; balls[0].dy=-CFG.speed; balls[0].dx=2; } };
-    function loop() { requestAnimationFrame(loop); update(); draw(); }
+function initBricks() {
+    bricks = [];
+    const l = LEVELS[stats.lvl % LEVELS.length];
+    let pool = [];
+    l.eq.forEach((q,i)=>pool.push({q, a:l.ea[i], t:'easy'}));
+    l.hq.forEach((q,i)=>pool.push({q, a:l.ha[i], t:'hard'}));
     
-    function startGame() {
-        initAudio();
-        document.getElementById('start-screen').classList.add('hidden');
-        document.getElementById('end-screen').classList.add('hidden');
-        document.getElementById('hud').classList.remove('hidden');
-        resize();
-        state='PLAY'; stats.sc=0; stats.lv=CFG.lives; timeLeft=CFG.time;
-        balls=[{x:0,y:0,r:6,dx:0,dy:0,mov:false}];
-        parts=[];
-        initBricks(); updHUD();
-        clearInterval(timerId);
-        timerId = setInterval(() => {
-            if(state==='PLAY') {
-                timeLeft--; 
-                if(timeLeft<=5) playSnd('tick');
-                if(timeLeft<=0) end(false);
-                updHUD();
+    // Grid logic (Original)
+    let rows = 6 + Math.min(6, Math.floor(pool.length/2));
+    let cols = 6, bw = w/cols, bh = h*0.05;
+    
+    for(let r=0; r<rows; r++) {
+        let qIdx = (pool.length && Math.random()>0.5) ? Math.floor(Math.random()*cols) : -1;
+        for(let c=0; c<cols; c++) {
+            let b = {x:c*bw+2, y:r*(bh+5)+60, w:bw-4, h:bh, a:true, type:'n', c:'rgba(255,255,255,0.15)'};
+            if(c===qIdx && pool.length) {
+                let p = pool.shift();
+                b.type = p.t; b.q = p; b.c = p.t==='easy' ? '#0f0' : '#ff0';
             }
-        }, 1000);
-        loop();
+            bricks.push(b);
+        }
     }
-    window.startGame = startGame;
-</script>
+}
+
+function resetBall() { ball={x:paddle.x+60, y:paddle.y-20, r:8, dx:0, dy:0, mov:false}; }
+
+function update() {
+    if(state!=='PLAY') return;
+    // Paddle (Mouse)
+    if(!ball.mov) ball.x = paddle.x+60;
+    
+    if(ball.mov) {
+        ball.x+=ball.dx; ball.y+=ball.dy;
+        if(ball.x<0 || ball.x>w) { ball.dx*=-1; playSnd('hit'); }
+        if(ball.y<0) { ball.dy*=-1; playSnd('hit'); }
+        if(ball.y+8 > paddle.y && ball.x>paddle.x && ball.x<paddle.x+paddle.w) {
+            ball.dy = -Math.abs(ball.dy);
+            let hitPos = (ball.x - (paddle.x+60))/60; 
+            ball.dx = hitPos * 5; 
+            playSnd('hit');
+        }
+        
+        // Bricks
+        bricks.forEach(b => {
+            if(!b.a) return;
+            if(ball.x>b.x && ball.x<b.x+b.w && ball.y>b.y && ball.y<b.y+b.h) {
+                ball.dy*=-1;
+                if(b.type === 'n') { b.a=false; stats.sc+=10; playSnd('hit'); }
+                else { ask(b); }
+            }
+        });
+
+        if(ball.y > h) {
+            stats.lv--; updHUD(); playSnd('wrong');
+            document.getElementById('game-container').classList.add('shake');
+            setTimeout(()=>document.getElementById('game-container').classList.remove('shake'), 400);
+            if(stats.lv<=0) end(false); else resetBall();
+        }
+    }
+    
+    // Particles
+    particles.forEach((p,i) => {
+        p.x+=p.dx; p.y+=p.dy; p.l-=0.02;
+        if(p.l<=0) particles.splice(i,1);
+    });
+}
+
+function draw() {
+    ctx.clearRect(0,0,w,h);
+    // Paddle
+    ctx.fillStyle='#fff'; ctx.shadowBlur=20; ctx.shadowColor=CFG.neon;
+    ctx.fillRect(paddle.x, paddle.y, paddle.w, paddle.h);
+    
+    // Ball
+    ctx.beginPath(); ctx.arc(ball.x, ball.y, ball.r, 0, Math.PI*2);
+    ctx.fillStyle=CFG.ballC; ctx.fill();
+    ctx.shadowBlur=0;
+
+    // Bricks
+    bricks.forEach(b => {
+        if(!b.a) return;
+        ctx.fillStyle = b.c;
+        ctx.fillRect(b.x, b.y, b.w, b.h);
+        ctx.strokeStyle='#000'; ctx.strokeRect(b.x, b.y, b.w, b.h);
+        if(b.type!=='n') {
+            ctx.fillStyle='#000'; ctx.font='bold 14px Arial'; ctx.fillText('?', b.x+b.w/2-4, b.y+b.h/2+5);
+        }
+    });
+    
+    // Particles
+    particles.forEach(p => {
+        ctx.fillStyle=p.c; ctx.globalAlpha=p.l;
+        if(CFG.winEff==='bubbles') { ctx.beginPath(); ctx.arc(p.x,p.y,p.s,0,7); ctx.fill(); }
+        else if(CFG.winEff==='stars') { ctx.font=p.s*3+'px Arial'; ctx.fillText('⭐',p.x,p.y); }
+        else if(CFG.winEff==='flowers') { ctx.font=p.s*3+'px Arial'; ctx.fillText('🌸',p.x,p.y); }
+        else { ctx.fillRect(p.x,p.y,p.s,p.s); }
+    });
+    ctx.globalAlpha=1;
+}
+
+function ask(b) {
+    state = 'Q';
+    const box = document.getElementById('q-panel');
+    const txt = document.getElementById('q-text');
+    const ans = document.getElementById('q-ans');
+    const s = b.type==='easy' ? CFG.easy : CFG.hard;
+
+    // Apply styles dynamically
+    box.style.borderColor = s.neon;
+    box.style.boxShadow = '0 0 25px '+s.neon;
+    txt.style.fontFamily = s.font;
+    txt.style.fontSize = s.size+'px';
+    txt.style.color = s.col;
+    txt.innerText = b.q.q;
+
+    ans.innerHTML = '';
+    const opts = b.q.a.split('|');
+    const corr = opts[0];
+    opts.sort(()=>Math.random()-0.5).forEach(o => {
+        const btn = document.createElement('div');
+        btn.className = 'ans-btn';
+        btn.innerText = o;
+        btn.style.fontFamily = s.font;
+        btn.onclick = () => {
+            document.getElementById('q-screen').classList.add('hidden');
+            if(o===corr) {
+                b.a=false; stats.sc+=100; playSnd('correct');
+                bricks.forEach(br => { if(Math.abs(br.y-b.y)<5) br.a=false; }); // Clear row
+            } else {
+                stats.lv--; updHUD(); playSnd('wrong');
+                if(stats.lv<=0) end(false);
+            }
+            if(state!=='END') state='PLAY';
+        };
+        ans.appendChild(btn);
+    });
+
+    document.getElementById('q-screen').classList.remove('hidden');
+}
+
+function startGame() {
+    initAudio();
+    document.querySelectorAll('.overlay').forEach(o=>o.classList.add('hidden'));
+    document.getElementById('hud').classList.remove('hidden');
+    stats.sc=0; stats.lv=CFG.lives; timeLeft=CFG.time;
+    resize(); initBricks(); resetBall(); updHUD();
+    state = 'PLAY';
+    clearInterval(timer);
+    timer = setInterval(() => {
+        if(state==='PLAY') {
+            timeLeft--; updHUD();
+            if(timeLeft<=0) end(false);
+        }
+    }, 1000);
+    loop();
+}
+
+function end(win) {
+    state='END'; clearInterval(timer);
+    document.getElementById('hud').classList.add('hidden');
+    document.getElementById('end-screen').classList.remove('hidden');
+    const t = document.getElementById('end-title');
+    t.innerText = win ? CFG.winTxt : CFG.loseTxt;
+    t.style.color = win ? '#0f0' : '#f00';
+    document.getElementById('end-score').innerText = stats.sc;
+    playSnd(win?'win':'lose');
+    if(win) setInterval(() => {
+        for(let i=0; i<10; i++) particles.push({
+            x:Math.random()*w, y:Math.random()*h, dx:(Math.random()-0.5)*5, dy:(Math.random()-0.5)*5,
+            l:1, s:Math.random()*5+2, c:'hsl('+Math.random()*360+',100%,50%)'
+        });
+    }, 300);
+}
+
+function updHUD() {
+    document.getElementById('sc').innerText = stats.sc;
+    document.getElementById('lv').innerText = '❤️'.repeat(stats.lv);
+    const tm = document.getElementById('tm');
+    tm.innerText = timeLeft;
+    tm.className = timeLeft<=10 ? 'timer-warn' : '';
+}
+
+window.onmousemove = e => paddle.x = e.clientX - 60;
+window.onclick = () => { if(state==='PLAY' && !ball.mov) { ball.mov=true; ball.dy=-CFG.speed; ball.dx=2; } };
+function loop() { update(); draw(); requestAnimationFrame(loop); }
+<\/script>
 </body>
-</html>
-</script>
+</html>`;
 
-<script>
-    // --- JS РЕДАКТОРА ---
-    const files = {};
+    // GENIALLY EMBED FIX
+    // Use srcdoc with escaped quotes
+    const embed = `<iframe srcdoc="${gameCode.replace(/"/g, '&quot;')}" width="100%" height="100%" frameborder="0"></iframe>`;
+    
+    navigator.clipboard.writeText(embed).then(() => {
+        alert("КОД СКОПИРОВАН! Вставьте в Genially (Insert > Others).");
+    });
+}
 
-    function setTab(id) {
-        document.querySelectorAll('.scroll-content').forEach(el => el.style.display = 'none');
-        document.getElementById('tab-' + id).style.display = 'block';
-        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-        event.target.classList.add('active');
-    }
-
-    function toggleBg() {
-        const t = document.getElementById('inp-bgType').value;
-        document.getElementById('bg-color-grp').style.display = t==='color'?'block':'none';
-        document.getElementById('bg-img-grp').style.display = t==='image'?'block':'none';
-    }
-
-    function loadFile(inp, key) {
-        if(inp.files[0]) {
-            const r = new FileReader();
-            r.onload = e => { files[key] = e.target.result; generate(); };
-            r.readAsDataURL(inp.files[0]);
-        }
-    }
-
-    function parseTasks(qId, aId, lvl) {
-        const qs = document.getElementById(qId).value.split('\n').filter(s=>s.trim());
-        const as = document.getElementById(aId).value.split('\n').filter(s=>s.trim());
-        return qs.map((q, i) => {
-            if(!as[i]) return null;
-            const parts = as[i].split('|');
-            const correctTxt = parts[0];
-            const shuffled = [...parts].sort(()=>Math.random()-0.5);
-            return {
-                q: q,
-                opts: shuffled,
-                cor: shuffled.indexOf(correctTxt),
-                lvl: lvl
-            };
-        }).filter(x=>x);
-    }
-
-    function generate() {
-        const ez = parseTasks('easyQ', 'easyA', 'easy');
-        const hd = parseTasks('hardQ', 'hardA', 'hard');
-        const allTasks = [...ez, ...hd];
-        
-        let rows = 12;
-        if(allTasks.length > 10) rows = Math.min(18, 12 + (allTasks.length - 10));
-
-        let tpl = document.getElementById('game-template').innerHTML;
-        
-        // Helper to replace text
-        const rep = (k, v) => tpl = tpl.replace(new RegExp('{{'+k+'}}', 'g'), v);
-        
-        rep('TITLE_TXT', document.getElementById('inp-title').value);
-        rep('TITLE_FONT', document.getElementById('inp-fontTitle').value);
-        rep('TITLE_SIZE', document.getElementById('inp-sizeTitle').value);
-        rep('TITLE_COL', document.getElementById('inp-colTitle').value);
-        rep('NEON_TITLE', document.getElementById('inp-neonTitle').value);
-        
-        // BG
-        const bgT = document.getElementById('inp-bgType').value;
-        let bgStyle = '';
-        if(bgT === 'color') bgStyle = `background: ${document.getElementById('inp-bgColor').value};`;
-        else if(bgT === 'image' && files.bg) bgStyle = `background: url('${files.bg}') center/cover;`;
-        rep('BG_STYLE', bgStyle);
-
-        // Game Settings
-        rep('LIVES', document.getElementById('inp-lives').value);
-        rep('TIME', document.getElementById('inp-time').value);
-        rep('SPEED', document.getElementById('inp-speed').value);
-        rep('BALL_COL', document.getElementById('inp-ballCol').value);
-        rep('ROWS', rows);
-        
-        // Tasks Visuals
-        rep('EZ_COL', document.getElementById('inp-ezCol').value);
-        rep('EZ_NEON', document.getElementById('inp-ezNeon').value);
-        rep('HD_COL', document.getElementById('inp-hdCol').value);
-        rep('HD_NEON', document.getElementById('inp-hdNeon').value);
-
-        // Win
-        rep('WIN_TXT', document.getElementById('inp-winTxt').value);
-        rep('WIN_EFF', document.getElementById('inp-winEff').value);
-
-        // Data & Sounds
-        rep('TASKS_JSON', JSON.stringify(allTasks));
-        rep('SND_BGM', files.bgm ? `'${files.bgm}'` : 'null');
-        rep('SND_COR', files.cor ? `'${files.cor}'` : 'null');
-        rep('SND_ERR', files.err ? `'${files.err}'` : 'null');
-        rep('SND_WIN', files.win ? `'${files.win}'` : 'null');
-        rep('SND_LOSE', files.lose ? `'${files.lose}'` : 'null');
-
-        // Render
-        const finalHTML = tpl.replace(/&lt;/g, '<').replace(/&gt;/g, '>');
-        document.getElementById('previewFrame').srcdoc = finalHTML;
-        
-        // Copy logic (if clicked by user)
-        if(event && event.type==='click' && event.target.className.includes('generate-btn')) {
-            const copyStr = `<iframe srcdoc="${finalHTML.replace(/"/g, '&quot;')}" width="100%" height="100%" frameborder="0"></iframe>`;
-            navigator.clipboard.writeText(copyStr).then(()=>alert('Код скопирован!'));
-        }
-    }
-
-    // Init
-    generate();
+init();
 </script>
 </body>
 </html>
