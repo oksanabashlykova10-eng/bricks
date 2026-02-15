@@ -78,6 +78,7 @@
       display:flex;
       flex-direction:column;
       min-width:360px;
+      position:relative;
     }
 
     .right{
@@ -322,154 +323,159 @@
       color: rgba(234,246,255,.65);
       text-transform: uppercase;
       letter-spacing: .5px;
+      z-index:2;
     }
 
-/* Mock start screen (now like your original) */
-.mock-start{
-  position:absolute;
-  inset:46px 18px 18px 18px; /* было 24px → стало 18px */
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  background:
-    radial-gradient(900px 600px at 50% 40%, rgba(120,120,255,.12), transparent 60%),
-    radial-gradient(700px 500px at 30% 70%, rgba(0,245,255,.10), transparent 60%),
-    #070a2a;
-  border-radius:14px;
-  border:1px solid rgba(255,255,255,.08);
-}
+    /* ✅ FIX #1: Preview scale (ONLY in editor preview) */
+    .preview-box .mock-start,
+    .preview-box .mock-question{
+      transform: scale(.84);
+      transform-origin: top center;
+    }
 
-.mock-panel{
-  width:min(660px, 92%);              /* было 760px → стало 660px */
-  padding:22px 22px 18px 22px;        /* было 34/28 → стало меньше */
-  border-radius:18px;                 /* было 22px → стало 18px */
+    /* Mock start screen */
+    .mock-start{
+      position:absolute;
+      inset:46px 18px 18px 18px;
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      background:
+        radial-gradient(900px 600px at 50% 40%, rgba(120,120,255,.12), transparent 60%),
+        radial-gradient(700px 500px at 30% 70%, rgba(0,245,255,.10), transparent 60%),
+        #070a2a;
+      border-radius:14px;
+      border:1px solid rgba(255,255,255,.08);
+    }
 
-  border:2px solid var(--mock-neon, var(--c-cyan));
-  box-shadow:
-    0 0 24px color-mix(in srgb, var(--mock-neon, var(--c-cyan)) 70%, transparent),
-    inset 0 0 18px rgba(0,0,0,.35);
-  background: rgba(0,0,0,.55);
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  gap:14px;
-  text-align:center;
-}
+    .mock-panel{
+      width:min(660px, 92%);
+      padding:22px 22px 18px 22px;
+      border-radius:18px;
 
-.mock-title{
-  font-family: var(--mock-font, var(--mono));
-  font-size: min(var(--mock-size, 48px), 44px);
-  color: var(--mock-text, #ffffff);
-  text-shadow:
-    0 0 10px color-mix(in srgb, var(--mock-neon, var(--c-cyan)) 60%, transparent),
-    0 0 22px color-mix(in srgb, var(--mock-neon, var(--c-cyan)) 45%, transparent);
-  letter-spacing: 2px;
-  font-weight: 800;
-  margin:0;
-}
+      border:2px solid var(--mock-neon, var(--c-cyan));
+      box-shadow:
+        0 0 24px color-mix(in srgb, var(--mock-neon, var(--c-cyan)) 70%, transparent),
+        inset 0 0 18px rgba(0,0,0,.35);
+      background: rgba(0,0,0,.55);
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      gap:14px;
+      text-align:center;
+    }
 
-.mock-lines{
-  width:100%;
-  max-width: 620px;
-  text-align:left;
-  font-family: var(--mono);
-  color: rgba(234,246,255,.92);
-  font-size: 15px;
-  line-height: 1.55;
-  opacity:.95;
-}
+    .mock-title{
+      font-family: var(--mock-font, var(--mono));
+      font-size: min(var(--mock-size, 48px), 44px);
+      color: var(--mock-text, #ffffff);
+      text-shadow:
+        0 0 10px color-mix(in srgb, var(--mock-neon, var(--c-cyan)) 60%, transparent),
+        0 0 22px color-mix(in srgb, var(--mock-neon, var(--c-cyan)) 45%, transparent);
+      letter-spacing: 2px;
+      font-weight: 800;
+      margin:0;
+    }
 
-.mock-line{
-  display:flex;
-  gap:12px;
-  align-items:center;
-  margin: 6px 0;
-  justify-content:flex-start;
-}
+    .mock-lines{
+      width:100%;
+      max-width: 620px;
+      text-align:left;
+      font-family: var(--mono);
+      color: rgba(234,246,255,.92);
+      font-size: 15px;
+      line-height: 1.55;
+      opacity:.95;
+    }
 
-.sq{
-  width:14px;height:14px;border-radius:3px;flex:0 0 auto;
-  box-shadow: 0 0 12px rgba(255,255,255,.22);
-}
-.sq.g{ background:#42d98f; box-shadow: 0 0 14px rgba(66,217,143,.45); }
-.sq.y{ background:#ffb300; box-shadow: 0 0 14px rgba(255,179,0,.45); }
-.sq.b{ background:#2fb7ff; box-shadow: 0 0 14px rgba(47,183,255,.45); }
+    .mock-line{
+      display:flex;
+      gap:12px;
+      align-items:center;
+      margin: 6px 0;
+      justify-content:flex-start;
+    }
 
-.mock-pu{
-  margin-top: 8px;
-  display:flex;
-  flex-wrap:wrap;
-  gap:14px 18px;
-  justify-content:center;
-  font-size: 16px;
-}
+    .sq{
+      width:14px;height:14px;border-radius:3px;flex:0 0 auto;
+      box-shadow: 0 0 12px rgba(255,255,255,.22);
+    }
+    .sq.g{ background:#42d98f; box-shadow: 0 0 14px rgba(66,217,143,.45); }
+    .sq.y{ background:#ffb300; box-shadow: 0 0 14px rgba(255,179,0,.45); }
+    .sq.b{ background:#2fb7ff; box-shadow: 0 0 14px rgba(47,183,255,.45); }
 
-.mock-pu span{
-  display:inline-flex;
-  gap:8px;
-  align-items:center;
-  padding:6px 10px;
-  border-radius: 999px;
-  border:1px solid rgba(255,255,255,.14);
-  background: rgba(255,255,255,.06);
-}
+    .mock-pu{
+      margin-top: 8px;
+      display:flex;
+      flex-wrap:wrap;
+      gap:14px 18px;
+      justify-content:center;
+      font-size: 16px;
+    }
+    .mock-pu span{
+      display:inline-flex;
+      gap:8px;
+      align-items:center;
+      padding:6px 10px;
+      border-radius: 999px;
+      border:1px solid rgba(255,255,255,.14);
+      background: rgba(255,255,255,.06);
+    }
 
-.mock-startbtn{
-  margin-top: 8px;
-  padding:14px 44px;
-  border-radius: 999px;
-  border:2px solid #2bff5f;
-  background: rgba(0,0,0,.35);
-  color: #2bff5f;
-  font-family: var(--mono);
-  font-weight:900;
-  letter-spacing: 1px;
-  box-shadow: 0 0 18px rgba(43,255,95,.45);
-}
+    .mock-startbtn{
+      margin-top: 8px;
+      padding:14px 44px;
+      border-radius: 999px;
+      border:2px solid #2bff5f;
+      background: rgba(0,0,0,.35);
+      color: #2bff5f;
+      font-family: var(--mono);
+      font-weight:900;
+      letter-spacing: 1px;
+      box-shadow: 0 0 18px rgba(43,255,95,.45);
+    }
 
-/* Mock question modal */
-.mock-question{
-  position:absolute;
-  inset:46px 18px 18px 18px; /* было 24px → стало 18px */
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  background: rgba(0,0,0,.20);
-  border-radius: 14px;
-  border:1px solid rgba(255,255,255,.08);
-}
+    /* Mock question modal */
+    .mock-question{
+      position:absolute;
+      inset:46px 18px 18px 18px;
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      background: rgba(0,0,0,.20);
+      border-radius: 14px;
+      border:1px solid rgba(255,255,255,.08);
+    }
 
-.mock-qpanel{
-  width:min(660px, 92%);      /* было 760px → стало 660px */
-  padding:24px 22px;          /* было 36/34 → стало меньше */
-  border-radius: 18px;        /* было 22px → стало 18px */
+    .mock-qpanel{
+      width:min(660px, 92%);
+      padding:24px 22px;
+      border-radius: 18px;
 
-  border:2px solid var(--q-neon, var(--c-green));
-  box-shadow:
-    0 0 26px color-mix(in srgb, var(--q-neon, var(--c-green)) 70%, transparent),
-    inset 0 0 18px rgba(0,0,0,.35);
-  background: rgba(0,0,0,.65);
-  font-family: var(--q-font, var(--mono));
-  color: var(--q-text, #ffffff);
-}
-
-.mock-qtitle{
-  margin:0 0 14px 0;
-  font-size: 22px;
-  letter-spacing: 3px;
-  text-transform: uppercase;
-  color: var(--q-neon, var(--c-green));
-  text-shadow: 0 0 12px color-mix(in srgb, var(--q-neon, var(--c-green)) 70%, transparent);
-  font-weight: 900;
-}
-
-.mock-qtext{
-  font-size: 20px; /* было 22 → 20 */
-  margin:0 0 20px 0;
-  font-weight: 800;
-  color: var(--q-text, #ffffff);
-  text-shadow: 0 0 6px rgba(0,0,0,.35);
-}
+      border:2px solid var(--q-neon, var(--c-green));
+      box-shadow:
+        0 0 26px color-mix(in srgb, var(--q-neon, var(--c-green)) 70%, transparent),
+        inset 0 0 18px rgba(0,0,0,.35);
+      background: rgba(0,0,0,.65);
+      font-family: var(--q-font, var(--mono));
+      color: var(--q-text, #ffffff);
+    }
+    .mock-qtitle{
+      margin:0 0 14px 0;
+      font-size: 22px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--q-neon, var(--c-green));
+      text-shadow: 0 0 12px color-mix(in srgb, var(--q-neon, var(--c-green)) 70%, transparent);
+      font-weight: 900;
+    }
+    .mock-qtext{
+      font-size: 20px;
+      margin:0 0 20px 0;
+      font-weight: 800;
+      color: var(--q-text, #ffffff);
+      text-shadow: 0 0 6px rgba(0,0,0,.35);
+    }
     .mock-answers{
       display:flex;
       flex-direction:column;
@@ -617,7 +623,7 @@
           </div>
 
           <div class="hint">
-            Стартовый экран в игре теперь как в оригинале: инструкции + иконки бонусов (фиксировано, как на скрине).
+            Стартовый экран: инструкции + иконки бонусов (как в оригинале).
           </div>
         </div>
 
@@ -721,7 +727,7 @@
           </div>
 
           <div class="hint">
-            Нейтральные кирпичи теперь всегда разноцветные неоновые (как в оригинале). Их цвет не настраивается.
+            Нейтральные кирпичи: фиксировано стеклянные + разноцветные неоновые (как в оригинале). Их цвет не настраивается.
           </div>
         </div>
       </div>
@@ -845,7 +851,7 @@ had|has|have</textarea>
           </div>
 
           <div class="hint">
-            Звук удара по нейтральным кирпичам теперь возвращён (fallback-синт). Отдельная загрузка для него не нужна.
+            Звук удара по нейтральным кирпичам: встроен (синт) и работает без загрузки.
           </div>
         </div>
       </div>
@@ -1071,7 +1077,8 @@ bindSfx("sfxTick","tick");
   "winTitle","loseTitle","restartText","endNeon","winFX","btnNeon",
   "bgMode","bgColor","lives","timeLimit","ballSpeed","ballColor","ballGlow",
   "brickGreen","brickYellow",
-  "easyQ","easyA","hardQ","hardA"
+  "easyQ","easyA","hardQ","hardA",
+  "musicAutoplay","musicLoop","musicVol"
 ].forEach(id=>{
   const x = el(id);
   if(!x) return;
@@ -1082,7 +1089,6 @@ bindSfx("sfxTick","tick");
 function v(id){ return (el(id)?.value ?? "").trim(); }
 
 function updatePreview(){
-  // start
   const startTitle = v("startTitle");
   const startBtnText = v("startBtnText");
   const startFont = v("startFont");
@@ -1100,7 +1106,6 @@ function updatePreview(){
   el("mockStartTitle").textContent = startTitle || "Grammar Bricks";
   el("mockStartBtn").textContent = startBtnText || "START GAME";
 
-  // question preview
   const qNeon = (state.previewMode==="easy") ? v("brickGreen") : v("brickYellow");
   const qPanel = el("mockQPanel");
   qPanel.style.setProperty("--q-font", startFont);
@@ -1284,7 +1289,6 @@ function buildGameHtml(){
     border-radius: 12px;
   }
 
-  /* START BG now dark-blue like original */
   .overlay{
     position:absolute; inset:0;
     display:flex; justify-content:center; align-items:center;
@@ -1380,7 +1384,6 @@ function buildGameHtml(){
   }
   .btn:hover{ background: var(--btnNeon) !important; color:#000 !important; box-shadow: 0 0 40px var(--btnNeon) !important; transform: scale(1.05); }
 
-  /* HUD */
   #hud{
     position:absolute; top: 15px; left:0; width:100%;
     display:flex; justify-content:center; gap:18px; flex-wrap:wrap;
@@ -1402,7 +1405,6 @@ function buildGameHtml(){
     100%{ transform:scale(1);}
   }
 
-  /* Music button */
   #music-btn{
     position:absolute; top: 15px; right: 15px;
     background: rgba(0,0,0,.50);
@@ -1415,7 +1417,6 @@ function buildGameHtml(){
   }
   #music-btn.off{ border-color:#555; color:#555; }
 
-  /* Question panel */
   #question-modal.overlay{ background: rgba(0,0,0,.70); backdrop-filter: blur(4px); }
   .question-box{ padding: 40px !important; min-height: 300px; transition: .35s; }
   .q-theme-green{ border-color: var(--green) !important; box-shadow: 0 0 30px var(--green) !important; }
@@ -1459,7 +1460,6 @@ function buildGameHtml(){
   .q-theme-green .answer-dot{ background: var(--green); box-shadow: 0 0 8px var(--green); }
   .q-theme-yellow .answer-dot{ background: var(--yellow); box-shadow: 0 0 8px var(--yellow); }
 
-  /* Stats table on end */
   .stats-table{ width:100%; margin: 15px auto; border-collapse: collapse; font-size: 16px; text-align:left; color:#ddd; }
   .stats-table td{ padding: 8px 10px; border-bottom: 1px solid rgba(255,255,255,.20); }
   .stats-table td:last-child{ text-align:right; font-weight:bold; color:#fff; }
@@ -1480,7 +1480,8 @@ function buildGameHtml(){
     <span id="trophy-hud">🪙 x<b id="trophyVal">0</b></span>
   </div>
 
-  <!-- START (original-like) -->
+  <div id="music-btn" class="off">🎵</div>
+
   <div id="start-screen" class="overlay">
     <div class="neon-panel" id="startPanel">
       <h1 id="startH1"></h1>
@@ -1531,27 +1532,16 @@ function buildGameHtml(){
 <script>
   const CONFIG = ${cfgJson};
 
-  // ---- Texts
   document.getElementById('startH1').textContent = CONFIG.ui.startTitle || 'Grammar Bricks';
   document.getElementById('start-btn').textContent = CONFIG.ui.startBtnText || 'START GAME';
   document.getElementById('restart-btn').textContent = CONFIG.ui.restartText || 'PLAY AGAIN';
 
-  // Panel neons
   const startPanel = document.getElementById('startPanel');
   const endPanel = document.getElementById('endPanel');
   startPanel.style.borderColor = CONFIG.ui.startNeonOn ? CONFIG.ui.startNeon : 'rgba(255,255,255,.35)';
   startPanel.style.boxShadow = CONFIG.ui.startNeonOn ? ('0 0 25px '+CONFIG.ui.startNeon+', inset 0 0 20px rgba(0,255,255,.18)') : ('0 0 18px rgba(255,255,255,.10)');
   endPanel.style.borderColor = CONFIG.ui.endNeon || CONFIG.ui.startNeon;
   endPanel.style.boxShadow = '0 0 25px '+(CONFIG.ui.endNeon || CONFIG.ui.startNeon)+', inset 0 0 20px rgba(0,255,255,.18)';
-
-  // Button neon
-  document.querySelectorAll('.btn').forEach(b=>{
-    b.style.borderColor = CONFIG.ui.btnNeon;
-    b.style.color = CONFIG.ui.btnNeon;
-    b.style.boxShadow = '0 0 20px '+hexToRgba(CONFIG.ui.btnNeon,.35)+', inset 0 0 10px '+hexToRgba(CONFIG.ui.btnNeon,.16);
-    b.onmouseenter = ()=>{ b.style.boxShadow = '0 0 40px '+CONFIG.ui.btnNeon; };
-    b.onmouseleave = ()=>{ b.style.boxShadow = '0 0 20px '+hexToRgba(CONFIG.ui.btnNeon,.35)+', inset 0 0 10px '+hexToRgba(CONFIG.ui.btnNeon,.16); };
-  });
 
   function hexToRgba(hex, a){
     try{
@@ -1562,6 +1552,14 @@ function buildGameHtml(){
       return 'rgba('+r+','+g+','+b+','+a+')';
     }catch(e){ return 'rgba(0,245,255,'+a+')'; }
   }
+
+  document.querySelectorAll('.btn').forEach(b=>{
+    b.style.borderColor = CONFIG.ui.btnNeon;
+    b.style.color = CONFIG.ui.btnNeon;
+    b.style.boxShadow = '0 0 20px '+hexToRgba(CONFIG.ui.btnNeon,.35)+', inset 0 0 10px '+hexToRgba(CONFIG.ui.btnNeon,.16);
+    b.onmouseenter = ()=>{ b.style.boxShadow = '0 0 40px '+CONFIG.ui.btnNeon; };
+    b.onmouseleave = ()=>{ b.style.boxShadow = '0 0 20px '+hexToRgba(CONFIG.ui.btnNeon,.35)+', inset 0 0 10px '+hexToRgba(CONFIG.ui.btnNeon,.16); };
+  });
 
   // ---- Audio
   let audioCtx;
@@ -1593,7 +1591,6 @@ function buildGameHtml(){
     if(!audioCtx) return;
     const now = audioCtx.currentTime;
 
-    // Fallback synth
     if(name==='correct'){
       const osc = audioCtx.createOscillator(); const gain = audioCtx.createGain();
       osc.type='triangle';
@@ -1633,7 +1630,7 @@ function buildGameHtml(){
     }
   }
 
-  function playNeutralHit(){ // RETURNED: sound when hitting neutral bricks
+  function playNeutralHit(){
     if(!audioCtx) return;
     const now = audioCtx.currentTime;
     const o = audioCtx.createOscillator();
@@ -1776,8 +1773,8 @@ function buildGameHtml(){
     ctx.globalAlpha = 1;
   }
 
-  // ---- Game core (single level)
-  let state = 'START'; // START | PLAY | QUESTION | WIN | END
+  // ---- Game core
+  let state = 'START';
   let animationId, timerId;
 
   let stats = { score:0, correct:0, wrong:0, trophies:0 };
@@ -1835,13 +1832,12 @@ function buildGameHtml(){
     return Math.min(max, base + extra);
   }
 
-  // neon multi-color palette for neutral bricks (fixed like original)
+  // ✅ FIX #2: per-brick random palette (NOT by column)
   const neutralPalette = [
     '#2fb7ff', '#a14bff', '#ff4dd8', '#ff9f1a', '#48ff7a', '#00f5ff', '#ffd34d'
   ];
-  function pickNeutralColor(r,c){
-    const idx = (r*7 + c) % neutralPalette.length;
-    return neutralPalette[idx];
+  function randomNeutralColor(){
+    return neutralPalette[Math.floor(Math.random()*neutralPalette.length)];
   }
 
   function initBricks(){
@@ -1868,7 +1864,7 @@ function buildGameHtml(){
 
       for(let c=0;c<cols;c++){
         let type = 'neutral';
-        let color = pickNeutralColor(r,c);
+        let color = randomNeutralColor();
         let icon = '';
         let powerUpType = null;
 
@@ -1880,7 +1876,7 @@ function buildGameHtml(){
             const remainingSpots = (rows - r)*cols - c;
             if(Math.random() < (pDeck.length / Math.max(1,remainingSpots))*1.25){
               type='bonus';
-              color = '#2fb7ff'; // blue bonus bricks like original
+              color = '#2fb7ff';
               powerUpType = pDeck.pop();
               icon = powerUpType;
             }
@@ -2010,56 +2006,60 @@ function buildGameHtml(){
     }
 
     // bricks
-    bricks.forEach((row,r)=>{
-      row.forEach((b,c)=>{
+    bricks.forEach(row=>{
+      row.forEach(b=>{
         if(!b.active) return;
 
         const isQ = (b.type==='green' || b.type==='yellow');
         const isBonus = (b.type==='bonus');
+        const glow = b.color;
 
-     const glow = b.color;
+        // ✅ FIX #3: glass + neon haze for NEUTRAL
+        if(b.type === 'neutral'){
+          ctx.fillStyle = 'rgba(0,0,0,0.18)';
+          ctx.fillRect(b.x, b.y, b.w, b.h);
 
-// 1) “Стеклянная” заливка только для НЕЙТРАЛЬНЫХ
-if(b.type === 'neutral'){
-  // почти прозрачная тёмная заливка (эффект стекла)
-  ctx.fillStyle = 'rgba(0,0,0,0.18)';
-  ctx.fillRect(b.x, b.y, b.w, b.h);
+          // inner highlight gradient
+          const g = ctx.createLinearGradient(b.x, b.y, b.x, b.y + b.h);
+          g.addColorStop(0, 'rgba(255,255,255,0.10)');
+          g.addColorStop(0.45, 'rgba(255,255,255,0.03)');
+          g.addColorStop(1, 'rgba(255,255,255,0.00)');
+          ctx.fillStyle = g;
+          ctx.fillRect(b.x, b.y, b.w, b.h);
 
-  // лёгкий внутренний блик сверху (даёт “стекло”)
-  const g = ctx.createLinearGradient(b.x, b.y, b.x, b.y + b.h);
-  g.addColorStop(0, 'rgba(255,255,255,0.10)');
-  g.addColorStop(0.45, 'rgba(255,255,255,0.03)');
-  g.addColorStop(1, 'rgba(255,255,255,0.00)');
-  ctx.fillStyle = g;
-  ctx.fillRect(b.x, b.y, b.w, b.h);
+          // subtle colored haze
+          ctx.save();
+          ctx.globalAlpha = 0.10;
+          ctx.fillStyle = glow;
+          ctx.fillRect(b.x, b.y, b.w, b.h);
+          ctx.restore();
 
-  // неоновый контур
-  ctx.strokeStyle = glow;
-  ctx.lineWidth = 2;
-  ctx.shadowBlur = 14;
-  ctx.shadowColor = glow;
-  ctx.strokeRect(b.x, b.y, b.w, b.h);
+          // neon outline
+          ctx.strokeStyle = glow;
+          ctx.lineWidth = 2;
+          ctx.shadowBlur = 14;
+          ctx.shadowColor = glow;
+          ctx.strokeRect(b.x, b.y, b.w, b.h);
 
-  // второй “тонкий” контур внутри для воздушности
-  ctx.shadowBlur = 0;
-  ctx.globalAlpha = 0.55;
-  ctx.strokeStyle = 'rgba(255,255,255,0.22)';
-  ctx.lineWidth = 1;
-  ctx.strokeRect(b.x+1, b.y+1, b.w-2, b.h-2);
-  ctx.globalAlpha = 1;
+          // thin inner line
+          ctx.shadowBlur = 0;
+          ctx.globalAlpha = 0.55;
+          ctx.strokeStyle = 'rgba(255,255,255,0.22)';
+          ctx.lineWidth = 1;
+          ctx.strokeRect(b.x+1, b.y+1, b.w-2, b.h-2);
+          ctx.globalAlpha = 1;
 
-} else {
-  // 2) Остальные (вопросы/бонусы) — как раньше: заливка + неон
-  ctx.fillStyle = b.color;
-  ctx.strokeStyle = b.color;
-  ctx.lineWidth = 2;
-  ctx.shadowBlur = 10;
-  ctx.shadowColor = b.color;
+        } else {
+          ctx.fillStyle = b.color;
+          ctx.strokeStyle = b.color;
+          ctx.lineWidth = 2;
+          ctx.shadowBlur = 10;
+          ctx.shadowColor = b.color;
+          ctx.fillRect(b.x, b.y, b.w, b.h);
+          ctx.strokeRect(b.x, b.y, b.w, b.h);
+          ctx.shadowBlur = 0;
+        }
 
-  ctx.fillRect(b.x, b.y, b.w, b.h);
-  ctx.strokeRect(b.x, b.y, b.w, b.h);
-  ctx.shadowBlur = 0;
-}
         if(isQ){
           ctx.fillStyle = '#000';
           ctx.font = 'bold 18px Arial';
@@ -2076,7 +2076,6 @@ if(b.type === 'neutral'){
   function update(){
     if(state!=='PLAY') return;
 
-    // drops
     for(let i=drops.length-1;i>=0;i--){
       const d = drops[i];
       d.y += 2.5;
@@ -2088,7 +2087,6 @@ if(b.type === 'neutral'){
       }
     }
 
-    // balls
     balls.forEach(ball=>{
       if(!ball.moving){
         ball.x = paddle.x + paddle.w/2;
@@ -2105,7 +2103,6 @@ if(b.type === 'neutral'){
       if(ball.x > gameWidth - ball.r || ball.x < ball.r){
         ball.dx = -ball.dx;
         initAudio();
-        // wall bounce small beep
         if(audioCtx){
           const now = audioCtx.currentTime;
           const o = audioCtx.createOscillator(); const g = audioCtx.createGain();
@@ -2116,21 +2113,15 @@ if(b.type === 'neutral'){
           o.start(now); o.stop(now+0.10);
         }
       }
-      if(ball.y < ball.r){
-        ball.dy = -ball.dy;
-      }
-      if(ball.y > gameHeight){
-        ball.dead = true;
-      }
+      if(ball.y < ball.r) ball.dy = -ball.dy;
+      if(ball.y > gameHeight) ball.dead = true;
 
-      // paddle
       if(ball.y + ball.r > paddle.y && ball.x > paddle.x && ball.x < paddle.x + paddle.w){
         ball.dy = -Math.abs(ball.dy);
         ball.dx = ((ball.x - (paddle.x + paddle.w/2)) / (paddle.w/2)) * 7;
         shakeScreen('small');
       }
 
-      // bricks collision
       let hit = false;
       bricks.forEach((row, rIdx)=>{
         row.forEach(b=>{
@@ -2147,10 +2138,8 @@ if(b.type === 'neutral'){
             }else if(b.type==='bonus'){
               b.active=false;
               drops.push({x:b.x+b.w/2, y:b.y, type:b.powerUp});
-              // neutral hit sound too (feels consistent)
               if(audioCtx) playNeutralHit();
             }else{
-              // NEUTRAL: remove and score + RETURNED HIT SOUND
               b.active=false;
               stats.score += 10*combo;
               updateHUD();
@@ -2174,11 +2163,8 @@ if(b.type === 'neutral'){
       else resetBall();
     }
 
-    // win condition: no question bricks left
     const stillQ = bricks.some(row => row.some(b => b.active && (b.type==='green' || b.type==='yellow')));
-    if(!stillQ){
-      endGame(true);
-    }
+    if(!stillQ) endGame(true);
   }
 
   function loop(){
@@ -2213,7 +2199,6 @@ if(b.type === 'neutral'){
   canvas.addEventListener('click', launch);
   canvas.addEventListener('touchstart', launch);
 
-  // ---- Question logic
   function triggerQuestion(type){
     state = 'QUESTION';
     const modal = document.getElementById('question-modal');
@@ -2267,11 +2252,11 @@ if(b.type === 'neutral'){
       lives--;
       combo=1;
       shakeScreen('hard');
-      // convert question bricks in row into neutral (like your version)
+      // convert question bricks in row into neutral
       bricks[activeRowIndex].forEach(b=>{
         if(b.type==='green' || b.type==='yellow'){
           b.type='neutral';
-          b.color = pickNeutralColor(activeRowIndex, Math.floor((b.x/(gameWidth/7))||0));
+          b.color = randomNeutralColor(); // ✅ random per brick
         }
       });
     }
@@ -2346,7 +2331,6 @@ if(b.type === 'neutral'){
 
   function startGame(){
     initAudio();
-
     document.getElementById('start-screen').classList.add('hidden');
     document.getElementById('end-screen').classList.add('hidden');
 
@@ -2385,11 +2369,6 @@ if(b.type === 'neutral'){
 <\/script>
 </body>
 </html>`;
-}
-</script>
-</body>
-</html>
-`;
 }
 </script>
 </body>
