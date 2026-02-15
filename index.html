@@ -327,7 +327,7 @@
     /* Mock start screen (now like your original) */
     .mock-start{
       position:absolute;
-      inset:46px 24px 18px 24px;
+      inset:46px 20px 20px 20px;
       display:flex;
       justify-content:center;
       align-items:center;
@@ -338,9 +338,9 @@
       border:1px solid rgba(255,255,255,.08);
     }
     .mock-panel{
-      width:min(760px, 94%);
-      padding:34px 34px 28px 34px;
-      border-radius: 22px;
+      width:min(660px, 92%);
+      padding:22px 22px 18px 22px;
+      border-radius: 18px;
       border:2px solid var(--mock-neon, var(--c-cyan));
       box-shadow: 0 0 24px color-mix(in srgb, var(--mock-neon, var(--c-cyan)) 70%, transparent),
                   inset 0 0 18px rgba(0,0,0,.35);
@@ -353,7 +353,7 @@
     }
     .mock-title{
       font-family: var(--mock-font, var(--mono));
-      font-size: var(--mock-size, 48px);
+mock-title{ font-size: min(var(--mock-size, 48px), 44px); 
       color: var(--mock-text, #ffffff);
       text-shadow:
         0 0 10px color-mix(in srgb, var(--mock-neon, var(--c-cyan)) 60%, transparent),
@@ -419,7 +419,7 @@
     /* Mock question modal */
     .mock-question{
       position:absolute;
-      inset:46px 24px 18px 24px;
+      inset:46px 18px 18px 18px;
       display:flex;
       justify-content:center;
       align-items:center;
@@ -428,9 +428,9 @@
       border:1px solid rgba(255,255,255,.08);
     }
     .mock-qpanel{
-      width:min(760px, 94%);
-      padding:36px 34px;
-      border-radius: 22px;
+      width:min(660px, 92%);
+      padding:24px 22px;
+      border-radius: 18px;
       border:2px solid var(--q-neon, var(--c-green));
       box-shadow: 0 0 26px color-mix(in srgb, var(--q-neon, var(--c-green)) 70%, transparent),
                   inset 0 0 18px rgba(0,0,0,.35);
@@ -448,7 +448,7 @@
       font-weight: 900;
     }
     .mock-qtext{
-      font-size: 22px;
+      font-size: 20px;
       margin:0 0 20px 0;
       font-weight: 800;
       color: var(--q-text, #ffffff);
@@ -2001,19 +2001,49 @@ function buildGameHtml(){
         const isQ = (b.type==='green' || b.type==='yellow');
         const isBonus = (b.type==='bonus');
 
-        const fill = b.color;
-        ctx.fillStyle = fill;
+     const glow = b.color;
 
-        // neon stroke & glow (neutral bricks are multicolor)
-        ctx.strokeStyle = fill;
-        ctx.lineWidth = 2;
-        ctx.shadowBlur = 10;
-        ctx.shadowColor = fill;
+// 1) “Стеклянная” заливка только для НЕЙТРАЛЬНЫХ
+if(b.type === 'neutral'){
+  // почти прозрачная тёмная заливка (эффект стекла)
+  ctx.fillStyle = 'rgba(0,0,0,0.18)';
+  ctx.fillRect(b.x, b.y, b.w, b.h);
 
-        ctx.fillRect(b.x, b.y, b.w, b.h);
-        ctx.strokeRect(b.x, b.y, b.w, b.h);
-        ctx.shadowBlur = 0;
+  // лёгкий внутренний блик сверху (даёт “стекло”)
+  const g = ctx.createLinearGradient(b.x, b.y, b.x, b.y + b.h);
+  g.addColorStop(0, 'rgba(255,255,255,0.10)');
+  g.addColorStop(0.45, 'rgba(255,255,255,0.03)');
+  g.addColorStop(1, 'rgba(255,255,255,0.00)');
+  ctx.fillStyle = g;
+  ctx.fillRect(b.x, b.y, b.w, b.h);
 
+  // неоновый контур
+  ctx.strokeStyle = glow;
+  ctx.lineWidth = 2;
+  ctx.shadowBlur = 14;
+  ctx.shadowColor = glow;
+  ctx.strokeRect(b.x, b.y, b.w, b.h);
+
+  // второй “тонкий” контур внутри для воздушности
+  ctx.shadowBlur = 0;
+  ctx.globalAlpha = 0.55;
+  ctx.strokeStyle = 'rgba(255,255,255,0.22)';
+  ctx.lineWidth = 1;
+  ctx.strokeRect(b.x+1, b.y+1, b.w-2, b.h-2);
+  ctx.globalAlpha = 1;
+
+} else {
+  // 2) Остальные (вопросы/бонусы) — как раньше: заливка + неон
+  ctx.fillStyle = b.color;
+  ctx.strokeStyle = b.color;
+  ctx.lineWidth = 2;
+  ctx.shadowBlur = 10;
+  ctx.shadowColor = b.color;
+
+  ctx.fillRect(b.x, b.y, b.w, b.h);
+  ctx.strokeRect(b.x, b.y, b.w, b.h);
+  ctx.shadowBlur = 0;
+}
         if(isQ){
           ctx.fillStyle = '#000';
           ctx.font = 'bold 18px Arial';
