@@ -101,8 +101,8 @@
       background: rgba(0,0,0,.35);
     }
     .logo{
-      width:42px; height:42px;
-      border-radius:50%;
+  width:52px; height:52px;  /* было 42 → стало 52 */
+  border-radius:50%;
       border:1px solid rgba(0,245,255,.25);
       box-shadow: 0 0 16px rgba(0,245,255,.35);
       overflow:hidden;
@@ -253,16 +253,15 @@
       border:1px solid rgba(255,255,255,.10);
       box-shadow: 0 0 18px rgba(0,0,0,.35);
     }
-    .fineprint{
-      font-size:11px;
-      color: rgba(234,246,255,.65);
-      font-family: var(--mono);
-      white-space:nowrap;
-      overflow:hidden;
-      text-overflow:ellipsis;
-      max-width: 70%;
-    }
-
+.fineprint{
+font-size:11px;
+color: rgba(234,246,255,.75);
+font-family: var(--mono);
+white-space:normal; /* разрешаем перенос */
+overflow:visible; /* не режем */
+text-overflow:clip; /* без троеточия */
+max-width:none; /* не ограничиваем */
+}
     .hint{
       font-family: var(--mono);
       font-size:11px;
@@ -562,7 +561,7 @@
     <!-- LEFT -->
     <div class="left">
       <div class="brand">
-        <div class="logo" title="Кодинг с Никой">
+        <div class="logo" title="English Bootcamp">
           <img alt="logo" src="https://img.genially.com/67961b32a116fb001568a75e/673752a5-8d4d-40d1-9b5f-f04ebd91a27c.png">
         </div>
         <h1>BRICKS EDITOR</h1>
@@ -1479,8 +1478,6 @@ function buildGameHtml(){
     <span>Time: <b id="timerVal">60</b>s</span>
     <span id="trophy-hud">🪙 x<b id="trophyVal">0</b></span>
   </div>
-
-  <div id="music-btn" class="off">🎵</div>
 
   <div id="start-screen" class="overlay">
     <div class="neon-panel" id="startPanel">
