@@ -1,296 +1,115 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-    <meta charset="UTF-8">
-    <title>Grammar Bricks Editor</title>
-    <style>
-        :root {
-            --neon-main: #00f3ff;
-            --bg-dark: #0a0a10;
-            --panel-bg: #14141a;
-            --text-main: #e0e0e0;
-            --border-glow: 0 0 10px rgba(0, 243, 255, 0.3);
-        }
-
-        body {
-            margin: 0;
-            background: var(--bg-dark);
-            color: var(--text-main);
-            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-            height: 100vh;
-            display: flex;
-            overflow: hidden;
-        }
-
-        /* SIDEBAR */
-        .sidebar {
-            width: 450px;
-            background: var(--panel-bg);
-            border-right: 1px solid #333;
-            display: flex;
-            flex-direction: column;
-            box-shadow: 5px 0 20px rgba(0,0,0,0.5);
-            z-index: 10;
-        }
-
-        .logo-area {
-            padding: 20px;
-            background: #000;
-            border-bottom: 2px solid var(--neon-main);
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            box-shadow: 0 5px 15px rgba(0, 243, 255, 0.1);
-        }
-
-        .logo-area img {
-            height: 50px;
-            filter: drop-shadow(0 0 8px var(--neon-main));
-        }
-
-        .logo-area span {
-            font-size: 18px;
-            font-weight: 800;
-            color: #fff;
-            letter-spacing: 2px;
-            text-shadow: 0 0 10px var(--neon-main);
-        }
-
-        /* TABS */
-        .tabs {
-            display: flex;
-            background: #000;
-        }
-        .tab-btn {
-            flex: 1;
-            background: transparent;
-            border: none;
-            color: #666;
-            padding: 15px 0;
-            cursor: pointer;
-            font-weight: bold;
-            border-bottom: 3px solid transparent;
-            transition: 0.3s;
-        }
-        .tab-btn:hover { color: #fff; background: #111; }
-        .tab-btn.active {
-            color: var(--neon-main);
-            border-bottom-color: var(--neon-main);
-            text-shadow: 0 0 10px var(--neon-main);
-        }
-
-        /* CONTENT AREA */
-        .scroll-content {
-            flex: 1;
-            overflow-y: auto;
-            padding: 20px;
-        }
-        
-        .section {
-            background: rgba(255,255,255,0.03);
-            border: 1px solid #333;
-            border-radius: 8px;
-            padding: 15px;
-            margin-bottom: 20px;
-        }
-        .section-title {
-            color: var(--neon-main);
-            text-transform: uppercase;
-            font-size: 12px;
-            letter-spacing: 1px;
-            margin-bottom: 15px;
-            border-bottom: 1px solid #333;
-            padding-bottom: 5px;
-        }
-
-        /* FORMS */
-        .form-group { margin-bottom: 15px; }
-        label { display: block; font-size: 12px; color: #aaa; margin-bottom: 5px; }
-        input, select, textarea {
-            width: 100%;
-            background: #000;
-            border: 1px solid #444;
-            color: #fff;
-            padding: 8px;
-            border-radius: 4px;
-            box-sizing: border-box;
-            font-family: monospace;
-        }
-        textarea { resize: vertical; min-height: 80px; }
-        input:focus, select:focus, textarea:focus {
-            border-color: var(--neon-main);
-            outline: none;
-            box-shadow: 0 0 10px rgba(0,243,255,0.2);
-        }
-        
-        input[type="color"] { height: 40px; padding: 2px; cursor: pointer; }
-        
-        /* PREVIEW */
-        .preview-area {
-            flex: 1;
-            background: #000;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            background-image: 
-                linear-gradient(45deg, #111 25%, transparent 25%), 
-                linear-gradient(-45deg, #111 25%, transparent 25%), 
-                linear-gradient(45deg, transparent 75%, #111 75%), 
-                linear-gradient(-45deg, transparent 75%, #111 75%);
-            background-size: 20px 20px;
-            background-position: 0 0, 0 10px, 10px -10px, -10px 0px;
-            position: relative;
-        }
-        
-        iframe {
-            width: 100%;
-            height: 100%;
-            border: none;
-            box-shadow: 0 0 50px rgba(0,0,0,0.8);
-        }
-
-        .generate-btn {
-            background: linear-gradient(90deg, #00f3ff, #0066ff);
-            color: #000;
-            font-weight: 900;
-            border: none;
-            padding: 20px;
-            cursor: pointer;
-            font-size: 16px;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            transition: 0.3s;
-        }
-        .generate-btn:hover {
-            filter: brightness(1.2);
-            box-shadow: 0 0 20px var(--neon-main);
-        }
-
-        .copyright {
-            padding: 10px;
-            text-align: center;
-            font-size: 10px;
-            color: #555;
-            background: #050505;
-            border-top: 1px solid #222;
-        }
-
-        /* QUESTIONS LAYOUT */
-        .q-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-        .helper-text { font-size: 10px; color: #666; margin-top: 3px; font-style: italic; }
-
-    </style>
+<meta charset="UTF-8">
+<title>Grammar Bricks Editor Ultimate</title>
+<style>
+    :root {
+        --neon-main: #00f3ff;
+        --bg-dark: #0a0a10;
+        --panel-bg: #14141a;
+        --text-main: #e0e0e0;
+    }
+    body { margin: 0; background: var(--bg-dark); color: var(--text-main); font-family: 'Segoe UI', sans-serif; height: 100vh; display: flex; overflow: hidden; }
+    
+    /* СТИЛИ РЕДАКТОРА */
+    .sidebar { width: 420px; background: var(--panel-bg); border-right: 1px solid #333; display: flex; flex-direction: column; z-index: 10; box-shadow: 5px 0 20px #000; }
+    .logo-area { padding: 15px; background: #000; border-bottom: 2px solid var(--neon-main); display: flex; align-items: center; gap: 10px; }
+    .logo-area img { height: 40px; filter: drop-shadow(0 0 5px var(--neon-main)); }
+    .logo-area span { font-weight: 800; color: #fff; text-shadow: 0 0 10px var(--neon-main); letter-spacing: 1px; }
+    
+    .tabs { display: flex; background: #000; }
+    .tab-btn { flex: 1; background: transparent; border: none; color: #666; padding: 12px 0; cursor: pointer; font-weight: bold; border-bottom: 2px solid transparent; transition: 0.3s; }
+    .tab-btn.active { color: var(--neon-main); border-bottom-color: var(--neon-main); text-shadow: 0 0 8px var(--neon-main); background: #111; }
+    
+    .scroll-content { flex: 1; overflow-y: auto; padding: 15px; }
+    .section { background: rgba(255,255,255,0.03); border: 1px solid #333; border-radius: 6px; padding: 12px; margin-bottom: 15px; }
+    .section-title { color: var(--neon-main); font-size: 11px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px; border-bottom: 1px solid #333; padding-bottom: 4px; }
+    
+    .form-group { margin-bottom: 12px; }
+    label { display: block; font-size: 11px; color: #aaa; margin-bottom: 4px; }
+    input, select, textarea { width: 100%; background: #000; border: 1px solid #444; color: #fff; padding: 6px; border-radius: 4px; box-sizing: border-box; font-family: monospace; font-size: 12px; }
+    textarea { resize: vertical; min-height: 60px; }
+    input:focus, select:focus, textarea:focus { border-color: var(--neon-main); outline: none; box-shadow: 0 0 8px rgba(0,243,255,0.2); }
+    input[type="color"] { height: 30px; padding: 0; cursor: pointer; }
+    
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+    
+    .action-bar { padding: 15px; background: #050505; border-top: 1px solid #333; }
+    .generate-btn { width: 100%; background: linear-gradient(90deg, #00f3ff, #0066ff); color: #000; font-weight: 900; border: none; padding: 15px; cursor: pointer; text-transform: uppercase; letter-spacing: 1px; transition: 0.3s; border-radius: 4px; }
+    .generate-btn:hover { filter: brightness(1.2); box-shadow: 0 0 15px var(--neon-main); }
+    
+    .preview-area { flex: 1; background: #000; position: relative; display: flex; flex-direction: column; }
+    iframe { width: 100%; height: 100%; border: none; }
+    
+    .copyright { font-size: 9px; color: #555; text-align: center; margin-top: 5px; }
+</style>
 </head>
 <body>
 
 <div class="sidebar">
     <div class="logo-area">
-        <img src="https://img.genially.com/67961b32a116fb001568a75e/673752a5-8d4d-40d1-9b5f-f04ebd91a27c.png" alt="Logo">
-        <span>GRAMMAR<br>BRICKS</span>
+        <img src="https://img.genially.com/67961b32a116fb001568a75e/673752a5-8d4d-40d1-9b5f-f04ebd91a27c.png">
+        <span>GRAMMAR BRICKS</span>
     </div>
-
+    
     <div class="tabs">
-        <button class="tab-btn active" onclick="switchTab('visuals')">ВИЗУАЛ</button>
-        <button class="tab-btn" onclick="switchTab('gameplay')">ИГРА</button>
-        <button class="tab-btn" onclick="switchTab('tasks')">ЗАДАНИЯ</button>
-        <button class="tab-btn" onclick="switchTab('audio')">ЗВУК</button>
+        <button class="tab-btn active" onclick="setTab('visual')">ВИЗУАЛ</button>
+        <button class="tab-btn" onclick="setTab('game')">ИГРА</button>
+        <button class="tab-btn" onclick="setTab('tasks')">ЗАДАНИЯ</button>
+        <button class="tab-btn" onclick="setTab('audio')">ЗВУК</button>
     </div>
 
-    <div id="tab-visuals" class="scroll-content">
+    <div id="tab-visual" class="scroll-content">
         <div class="section">
-            <div class="section-title">Стартовый экран</div>
-            <div class="form-group">
-                <label>Название игры</label>
-                <input type="text" id="gameTitle" value="Grammar Bricks">
+            <div class="section-title">Главный экран</div>
+            <div class="form-group"><label>Заголовок игры</label><input type="text" id="inp-title" value="Grammar Bricks"></div>
+            <div class="grid-2">
+                <div class="form-group"><label>Шрифт</label><select id="inp-fontTitle"><option value="'Courier New'">Courier</option><option value="Arial">Arial</option><option value="'Comic Sans MS'">Comic Sans</option><option value="Verdana">Verdana</option></select></div>
+                <div class="form-group"><label>Размер</label><input type="number" id="inp-sizeTitle" value="32"></div>
             </div>
-            <div class="q-grid">
-                <div class="form-group">
-                    <label>Шрифт заголовка</label>
-                    <select id="titleFont">
-                        <option value="'Courier New', monospace">Courier New</option>
-                        <option value="'Comic Sans MS', cursive">Comic Sans</option>
-                        <option value="Arial, sans-serif">Arial</option>
-                        <option value="'Times New Roman', serif">Times New Roman</option>
-                        <option value="'Verdana', sans-serif">Verdana</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label>Размер (px)</label>
-                    <input type="number" id="titleSize" value="32">
-                </div>
-            </div>
-            <div class="q-grid">
-                <div class="form-group"><label>Цвет текста</label><input type="color" id="titleColor" value="#ffffff"></div>
-                <div class="form-group"><label>Цвет Неона</label><input type="color" id="neonColor" value="#00ffff"></div>
+            <div class="grid-2">
+                <div class="form-group"><label>Цвет текста</label><input type="color" id="inp-colTitle" value="#ffffff"></div>
+                <div class="form-group"><label>Цвет неона</label><input type="color" id="inp-neonTitle" value="#00ffff"></div>
             </div>
         </div>
 
         <div class="section">
-            <div class="section-title">Фон Игры</div>
-            <div class="form-group">
-                <label>Тип фона</label>
-                <select id="bgType" onchange="toggleBgInputs()">
-                    <option value="transparent">Прозрачный (Genially)</option>
-                    <option value="color">Сплошной цвет</option>
+            <div class="section-title">Фон игры</div>
+            <div class="form-group"><label>Тип</label>
+                <select id="inp-bgType" onchange="toggleBg()">
+                    <option value="transparent">Прозрачный (для Genially)</option>
+                    <option value="color">Цвет</option>
                     <option value="image">Своя картинка</option>
                 </select>
             </div>
-            <div class="form-group" id="bgColorGroup" style="display:none">
-                <label>Цвет фона</label>
-                <input type="color" id="bgColor" value="#111111">
-            </div>
-            <div class="form-group" id="bgImageGroup" style="display:none">
-                <label>Загрузить фон (JPG/PNG)</label>
-                <input type="file" id="bgFile" accept="image/*" onchange="handleFile(this, 'bg')">
-            </div>
-        </div>
-
-        <div class="section">
-            <div class="section-title">Вид вопросов</div>
-            <label style="color:#0f0; margin-top:5px;">🟩 ЗЕЛЕНЫЕ (EASY)</label>
-            <div class="q-grid">
-                <div class="form-group"><label>Шрифт</label><select id="easyFont"><option value="Arial">Arial</option><option value="'Courier New'">Courier</option></select></div>
-                <div class="form-group"><label>Размер</label><input type="number" id="easySize" value="22"></div>
-                <div class="form-group"><label>Текст</label><input type="color" id="easyColor" value="#ffffff"></div>
-                <div class="form-group"><label>Неон</label><input type="color" id="easyNeon" value="#00ff00"></div>
-            </div>
-
-            <label style="color:#ff0; margin-top:15px; display:block">🟨 ЖЕЛТЫЕ (HARD)</label>
-            <div class="q-grid">
-                <div class="form-group"><label>Шрифт</label><select id="hardFont"><option value="Arial">Arial</option><option value="'Courier New'">Courier</option></select></div>
-                <div class="form-group"><label>Размер</label><input type="number" id="hardSize" value="22"></div>
-                <div class="form-group"><label>Текст</label><input type="color" id="hardColor" value="#ffffff"></div>
-                <div class="form-group"><label>Неон</label><input type="color" id="hardNeon" value="#ffff00"></div>
-            </div>
+            <div id="bg-color-grp" class="form-group" style="display:none"><label>Цвет</label><input type="color" id="inp-bgColor" value="#111111"></div>
+            <div id="bg-img-grp" class="form-group" style="display:none"><label>Файл</label><input type="file" onchange="loadFile(this, 'bg')"></div>
         </div>
         
         <div class="section">
             <div class="section-title">Финал</div>
-            <div class="form-group"><label>Текст Победы</label><input type="text" id="winTitle" value="YOU WIN!"></div>
-            <div class="form-group"><label>Текст Поражения</label><input type="text" id="loseTitle" value="GAME OVER"></div>
-            <div class="form-group">
-                <label>Эффект Победы</label>
-                <select id="winEffect">
-                    <option value="firework">🎆 Фейерверк</option>
-                    <option value="bubbles">🫧 Пузырьки</option>
-                    <option value="flowers">🌸 Цветочки</option>
-                    <option value="stars">⭐ Звездочки</option>
+            <div class="form-group"><label>Победа (Текст)</label><input type="text" id="inp-winTxt" value="YOU WIN!"></div>
+            <div class="form-group"><label>Салют</label>
+                <select id="inp-winEff">
+                    <option value="firework">Фейерверк</option>
+                    <option value="bubbles">Пузырьки</option>
+                    <option value="flowers">Цветочки</option>
+                    <option value="stars">Звездочки</option>
                 </select>
             </div>
         </div>
     </div>
 
-    <div id="tab-gameplay" class="scroll-content" style="display:none">
+    <div id="tab-game" class="scroll-content" style="display:none">
         <div class="section">
-            <div class="section-title">Настройки</div>
-            <div class="q-grid">
-                <div class="form-group"><label>Жизни (❤️)</label><input type="number" id="startLives" value="3" min="1" max="10"></div>
-                <div class="form-group"><label>Время (сек)</label><input type="number" id="startTime" value="90" min="30"></div>
+            <div class="grid-2">
+                <div class="form-group"><label>Жизни</label><input type="number" id="inp-lives" value="3"></div>
+                <div class="form-group"><label>Таймер (сек)</label><input type="number" id="inp-time" value="90"></div>
             </div>
-            <div class="q-grid">
-                <div class="form-group"><label>Скорость шара</label><input type="range" id="ballSpeed" min="3" max="8" value="5"></div>
-                <div class="form-group"><label>Цвет шара</label><input type="color" id="ballColor" value="#ffffff"></div>
+            <div class="grid-2">
+                <div class="form-group"><label>Скорость шара</label><input type="range" id="inp-speed" min="3" max="10" value="5"></div>
+                <div class="form-group"><label>Цвет шара</label><input type="color" id="inp-ballCol" value="#ffffff"></div>
             </div>
         </div>
     </div>
@@ -300,12 +119,15 @@
             <div class="section-title" style="color:#0f0">EASY TASKS (Зеленые)</div>
             <div class="form-group">
                 <label>Вопросы (один на строку)</label>
-                <textarea id="easyQ" placeholder="She ___ to school.&#10;Opposite of 'Happy'?">She ___ to school.&#10;I ___ an apple.&#10;Opposite of 'Happy'?&#10;Plural of 'Child'?</textarea>
+                <textarea id="easyQ">She ___ to school.&#10;Opposite of 'Happy'?</textarea>
             </div>
             <div class="form-group">
-                <label>Ответы (Правильный|Неверный|Неверный)</label>
-                <textarea id="easyA" placeholder="goes|go|going&#10;Sad|Glad|Joy">goes|go|going&#10;ate|eat|eaten&#10;Sad|Glad|Joy&#10;Children|Childs|Childrens</textarea>
-                <div class="helper-text">* Первый ответ всегда правильный. Игра сама перемешает их.</div>
+                <label>Ответы (Верный|Неверный|Неверный)</label>
+                <textarea id="easyA">goes|go|going&#10;Sad|Glad|Joy</textarea>
+            </div>
+            <div class="grid-2">
+                <div class="form-group"><label>Цвет текста</label><input type="color" id="inp-ezCol" value="#ffffff"></div>
+                <div class="form-group"><label>Неон</label><input type="color" id="inp-ezNeon" value="#00ff00"></div>
             </div>
         </div>
 
@@ -313,690 +135,495 @@
             <div class="section-title" style="color:#ff0">HARD TASKS (Желтые)</div>
             <div class="form-group">
                 <label>Вопросы (один на строку)</label>
-                <textarea id="hardQ" placeholder="If I were you, I ___ go.">If I were you, I ___ go.&#10;The book ___ yesterday.&#10;I enjoy ___ TV.&#10;We ___ here since 2010.</textarea>
+                <textarea id="hardQ">If I were you, I ___ go.</textarea>
             </div>
             <div class="form-group">
-                <label>Ответы (Правильный|Неверный|Неверный)</label>
-                <textarea id="hardA" placeholder="would|will|had">would|will|had&#10;was written|was wrote|wrote&#10;watching|watch|to watch&#10;have lived|lived|live</textarea>
+                <label>Ответы (Верный|Неверный|Неверный)</label>
+                <textarea id="hardA">would|will|had</textarea>
+            </div>
+            <div class="grid-2">
+                <div class="form-group"><label>Цвет текста</label><input type="color" id="inp-hdCol" value="#ffffff"></div>
+                <div class="form-group"><label>Неон</label><input type="color" id="inp-hdNeon" value="#ffff00"></div>
             </div>
         </div>
     </div>
 
     <div id="tab-audio" class="scroll-content" style="display:none">
         <div class="section">
-            <div class="section-title">Фоновая музыка</div>
-            <div class="form-group">
-                <label>Загрузить MP3</label>
-                <input type="file" accept="audio/*" onchange="handleFile(this, 'bgm')">
-            </div>
-        </div>
-        <div class="section">
-            <div class="section-title">Звуковые эффекты</div>
-            <div class="helper-text">Если не загрузить, будут стандартные звуки.</div>
-            <br>
-            <div class="form-group"><label>✅ Правильный ответ</label><input type="file" accept="audio/*" onchange="handleFile(this, 'sfxCorrect')"></div>
-            <div class="form-group"><label>❌ Неверный ответ</label><input type="file" accept="audio/*" onchange="handleFile(this, 'sfxWrong')"></div>
-            <div class="form-group"><label>🏆 Победа</label><input type="file" accept="audio/*" onchange="handleFile(this, 'sfxWin')"></div>
-            <div class="form-group"><label>☠️ Проигрыш</label><input type="file" accept="audio/*" onchange="handleFile(this, 'sfxLose')"></div>
+            <div class="form-group"><label>Фоновая музыка</label><input type="file" onchange="loadFile(this, 'bgm')"></div>
+            <div class="form-group"><label>Правильный ответ</label><input type="file" onchange="loadFile(this, 'cor')"></div>
+            <div class="form-group"><label>Ошибка</label><input type="file" onchange="loadFile(this, 'err')"></div>
+            <div class="form-group"><label>Победа</label><input type="file" onchange="loadFile(this, 'win')"></div>
+            <div class="form-group"><label>Провал</label><input type="file" onchange="loadFile(this, 'lose')"></div>
         </div>
     </div>
 
-    <button class="generate-btn" onclick="generateCode()">СКОПИРОВАТЬ КОД ДЛЯ GENIALLY</button>
-    
-    <div class="copyright">
-        © Все права принадлежат Башлыковой Оксане Михайловне
+    <div class="action-bar">
+        <button class="generate-btn" onclick="generate()">СКОПИРОВАТЬ КОД</button>
+        <div class="copyright">© Все права принадлежат Башлыковой Оксане Михайловне</div>
     </div>
 </div>
 
 <div class="preview-area">
-    <iframe id="gamePreview"></iframe>
+    <iframe id="previewFrame"></iframe>
 </div>
 
-<script>
-    // --- ХРАНИЛИЩЕ ДАННЫХ (Base64) ---
-    const assets = {
-        bg: null,
-        bgm: null,
-        sfxCorrect: null,
-        sfxWrong: null,
-        sfxWin: null,
-        sfxLose: null
-    };
-
-    function switchTab(id) {
-        document.querySelectorAll('.scroll-content').forEach(el => el.style.display = 'none');
-        document.getElementById('tab-' + id).style.display = 'block';
-        document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
-        event.target.classList.add('active');
-    }
-
-    function toggleBgInputs() {
-        const type = document.getElementById('bgType').value;
-        document.getElementById('bgColorGroup').style.display = type === 'color' ? 'block' : 'none';
-        document.getElementById('bgImageGroup').style.display = type === 'image' ? 'block' : 'none';
-    }
-
-    function handleFile(input, key) {
-        if (input.files && input.files[0]) {
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                assets[key] = e.target.result;
-                alert('Файл загружен!');
-            };
-            reader.readAsDataURL(input.files[0]);
-        }
-    }
-
-    function getCombinedTasks() {
-        const parse = (qId, aId, lvl) => {
-            const qList = document.getElementById(qId).value.split('\n').filter(s => s.trim());
-            const aList = document.getElementById(aId).value.split('\n').filter(s => s.trim());
-            
-            return qList.map((q, i) => {
-                if (!aList[i]) return null;
-                const rawAnswers = aList[i].split('|');
-                // Логика перемешивания, но запоминания правильного (он всегда первый в исходнике)
-                const correctText = rawAnswers[0];
-                // Создаем объект с перемешанными ответами
-                let shuffled = [...rawAnswers].sort(() => Math.random() - 0.5);
-                let correctIndex = shuffled.indexOf(correctText);
-                
-                return {
-                    q: q,
-                    a: shuffled,
-                    correct: correctIndex,
-                    level: lvl
-                };
-            }).filter(item => item !== null);
-        };
-
-        const easy = parse('easyQ', 'easyA', 'easy');
-        const hard = parse('hardQ', 'hardA', 'hard');
-        return [...easy, ...hard];
-    }
-
-    function generateCode() {
-        // 1. Сбор данных
-        const tasks = getCombinedTasks();
-        const totalQ = tasks.length;
-        
-        // Логика сетки (Grid Logic)
-        let rowCount = 12;
-        if (totalQ > 10) {
-            let extra = totalQ - 10;
-            rowCount = Math.min(18, 12 + extra); // Увеличиваем ряды, макс 18
-        }
-
-        const config = {
-            title: document.getElementById('gameTitle').value,
-            fontTitle: document.getElementById('titleFont').value,
-            sizeTitle: document.getElementById('titleSize').value + 'px',
-            colTitle: document.getElementById('titleColor').value,
-            neonTitle: document.getElementById('neonColor').value,
-            
-            bgType: document.getElementById('bgType').value,
-            bgColor: document.getElementById('bgColor').value,
-            bgImg: assets.bg,
-
-            fontEasy: document.getElementById('easyFont').value,
-            sizeEasy: document.getElementById('easySize').value + 'px',
-            colEasy: document.getElementById('easyColor').value,
-            neonEasy: document.getElementById('easyNeon').value,
-
-            fontHard: document.getElementById('hardFont').value,
-            sizeHard: document.getElementById('hardSize').value + 'px',
-            colHard: document.getElementById('hardColor').value,
-            neonHard: document.getElementById('hardNeon').value,
-
-            lives: parseInt(document.getElementById('startLives').value),
-            time: parseInt(document.getElementById('startTime').value),
-            speed: parseInt(document.getElementById('ballSpeed').value),
-            ballCol: document.getElementById('ballColor').value,
-            
-            winTxt: document.getElementById('winTitle').value,
-            loseTxt: document.getElementById('loseTitle').value,
-            winEff: document.getElementById('winEffect').value,
-
-            rows: rowCount
-        };
-
-        // 2. Генерация HTML (на основе Source 1)
-        const gameHTML = `
+<script type="text/template" id="game-template">
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-    <meta charset="UTF-8">
-    <title>${config.title}</title>
-    <style>
-        body, html { margin: 0; padding: 0; width: 100%; height: 100%; overflow: hidden; background: transparent; font-family: 'Courier New', monospace; user-select: none; }
-        #game-container { position: relative; width: 100%; height: 100%; display: flex; justify-content: center; align-items: center; }
-        
-        /* DYNAMIC BACKGROUND */
-        .bg-layer { position: absolute; top:0; left:0; width:100%; height:100%; z-index:-1; 
-            ${config.bgType === 'color' ? `background: ${config.bgColor};` : ''}
-            ${config.bgType === 'image' && config.bgImg ? `background: url('${config.bgImg}') center/cover no-repeat;` : ''}
-        }
+<meta charset="UTF-8">
+<style>
+    body, html { margin: 0; padding: 0; width: 100%; height: 100%; overflow: hidden; background: transparent; font-family: {{TITLE_FONT}}, monospace; user-select: none; }
+    #game-container { position: relative; width: 100%; height: 100%; display: flex; justify-content: center; align-items: center; }
+    
+    .bg-layer { position: absolute; top:0; left:0; width:100%; height:100%; z-index:-1; {{BG_STYLE}} }
 
-        /* ANIMATIONS */
-        .shake { animation: shake-anim 0.4s both; }
-        .shake-small { animation: shake-s-anim 0.2s both; }
-        @keyframes shake-anim { 10%, 90% { transform: translate3d(-5px, 0, 0); } 20%, 80% { transform: translate3d(5px, 0, 0); } 30%, 50%, 70% { transform: translate3d(-10px, 0, 0); } 40%, 60% { transform: translate3d(10px, 0, 0); } }
-        @keyframes shake-s-anim { 0% { transform: translate(0, 0); } 25% { transform: translate(2px, 2px); } 50% { transform: translate(-2px, -2px); } 75% { transform: translate(2px, -2px); } 100% { transform: translate(0, 0); } }
-        
-        canvas { display: block; width: 100%; height: 100%; border-radius: 12px; box-shadow: inset 0 0 20px rgba(0, 255, 255, 0.1); border: 2px solid rgba(0, 255, 255, 0.1); }
-        .overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.85); backdrop-filter: blur(4px); display: flex; justify-content: center; align-items: center; z-index: 20; transition: opacity 0.3s; }
-        .overlay.win-mode { background: rgba(0, 0, 0, 0.3) !important; backdrop-filter: none !important; }
-        .hidden { opacity: 0; pointer-events: none; z-index: -1 !important; }
+    /* ANIMATIONS */
+    .shake { animation: s 0.4s both; }
+    .shake-s { animation: ss 0.2s both; }
+    @keyframes s { 10%,90%{transform:translate3d(-5px,0,0)} 20%,80%{transform:translate3d(5px,0,0)} 30%,50%,70%{transform:translate3d(-10px,0,0)} 40%,60%{transform:translate3d(10px,0,0)} }
+    @keyframes ss { 0%{transform:translate(0,0)} 25%{transform:translate(2px,2px)} 50%{transform:translate(-2px,-2px)} 75%{transform:translate(2px,-2px)} 100%{transform:translate(0,0)} }
 
-        /* NEON PANEL (Start/End) */
-        .neon-panel {
-            background: rgba(10, 10, 15, 0.96);
-            border: 2px solid ${config.neonTitle}; 
-            box-shadow: 0 0 25px ${config.neonTitle}, inset 0 0 20px rgba(0,0,0,0.5);
-            padding: 35px; border-radius: 20px; color: #fff; text-align: center; max-width: 600px; width: 90%;
-            display: flex; flex-direction: column; align-items: center;
-        }
-        h1 { margin: 0 0 15px 0; font-family: ${config.fontTitle}; font-size: ${config.sizeTitle}; color: ${config.colTitle}; text-shadow: 0 0 15px ${config.neonTitle}; letter-spacing: 2px; }
-        p { margin: 6px 0; font-size: 18px; line-height: 1.3; color: #eee; }
+    canvas { display: block; width: 100%; height: 100%; border-radius: 12px; border: 2px solid rgba(0, 255, 255, 0.1); }
+    .overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.85); backdrop-filter: blur(4px); display: flex; justify-content: center; align-items: center; z-index: 20; transition: opacity 0.3s; }
+    .overlay.win-mode { background: rgba(0, 0, 0, 0.3) !important; backdrop-filter: none !important; }
+    .hidden { opacity: 0; pointer-events: none; z-index: -1 !important; }
 
-        .btn {
-            background: transparent !important; border: 3px solid ${config.neonTitle} !important; color: ${config.neonTitle} !important;
-            padding: 15px 50px !important; font-size: 24px !important; margin-top: 25px !important; cursor: pointer !important;
-            text-transform: uppercase !important; font-weight: 800 !important; border-radius: 50px !important;
-            box-shadow: 0 0 20px ${config.neonTitle}, inset 0 0 10px rgba(0,0,0,0.2) !important; transition: all 0.3s ease !important;
-        }
-        .btn:hover { background: ${config.neonTitle} !important; color: #000 !important; box-shadow: 0 0 40px ${config.neonTitle} !important; transform: scale(1.05); }
+    .neon-panel {
+        background: rgba(10, 10, 15, 0.96);
+        border: 2px solid {{NEON_TITLE}}; 
+        box-shadow: 0 0 25px {{NEON_TITLE}}, inset 0 0 20px rgba(0,0,0,0.5);
+        padding: 30px; border-radius: 20px; color: #fff; text-align: center; max-width: 600px; width: 90%;
+        display: flex; flex-direction: column; align-items: center;
+    }
+    h1 { margin: 0 0 15px 0; font-family: {{TITLE_FONT}}; font-size: {{TITLE_SIZE}}px; color: {{TITLE_COL}}; text-shadow: 0 0 15px {{NEON_TITLE}}; letter-spacing: 2px; }
+    
+    .btn {
+        background: transparent !important; border: 3px solid {{NEON_TITLE}} !important; color: {{NEON_TITLE}} !important;
+        padding: 15px 40px !important; font-size: 22px !important; margin-top: 20px !important; cursor: pointer !important;
+        text-transform: uppercase !important; font-weight: 800 !important; border-radius: 50px !important;
+        box-shadow: 0 0 15px {{NEON_TITLE}}; transition: 0.3s;
+    }
+    .btn:hover { background: {{NEON_TITLE}} !important; color: #000 !important; transform: scale(1.05); }
 
-        #hud { position: absolute; top: 15px; left: 0; width: 100%; display: flex; justify-content: center; gap: 20px; flex-wrap: wrap; color: #fff; font-size: 18px; font-weight: bold; text-shadow: 0 0 5px #fff, 0 0 10px #000; z-index: 10; pointer-events: none; }
-        .timer-warning { color: #ff0000; font-weight: bold; text-shadow: 0 0 10px rgba(255, 0, 0, 0.8); animation: heartbeat 1s infinite; }
-        @keyframes heartbeat { 0% { transform: scale(1); } 15% { transform: scale(1.4); } 30% { transform: scale(1.1); } 45% { transform: scale(1.4); } 100% { transform: scale(1); } }
+    #hud { position: absolute; top: 10px; left: 0; width: 100%; display: flex; justify-content: center; gap: 15px; color: #fff; font-size: 18px; font-weight: bold; text-shadow: 0 0 5px #000; z-index: 10; pointer-events: none; }
+    .timer-warn { color: #f00; animation: ss 0.5s infinite; }
 
-        /* QUESTIONS */
-        .question-box { padding: 40px !important; min-height: 300px; transition: all 0.4s ease; }
-        .q-title { text-transform: uppercase; letter-spacing: 4px; font-size: 24px; margin-bottom: 25px; font-weight: 900; }
-        .q-text { font-weight: bold; line-height: 1.4; margin-bottom: 30px; }
-        
-        /* Theme Easy (Green) */
-        .q-theme-green { border-color: ${config.neonEasy} !important; box-shadow: 0 0 30px ${config.neonEasy} !important; }
-        .q-theme-green .q-title { color: ${config.neonEasy}; text-shadow: 0 0 15px ${config.neonEasy}; }
-        .q-theme-green .q-text { font-family: ${config.fontEasy}; font-size: ${config.sizeEasy}; color: ${config.colEasy}; }
-        .q-theme-green .answer-btn:hover { border-color: ${config.neonEasy}; box-shadow: 0 0 15px ${config.neonEasy}; }
-        
-        /* Theme Hard (Yellow) */
-        .q-theme-yellow { border-color: ${config.neonHard} !important; box-shadow: 0 0 30px ${config.neonHard} !important; }
-        .q-theme-yellow .q-title { color: ${config.neonHard}; text-shadow: 0 0 15px ${config.neonHard}; }
-        .q-theme-yellow .q-text { font-family: ${config.fontHard}; font-size: ${config.sizeHard}; color: ${config.colHard}; }
-        .q-theme-yellow .answer-btn:hover { border-color: ${config.neonHard}; box-shadow: 0 0 15px ${config.neonHard}; }
+    /* QUESTIONS */
+    .q-box { padding: 30px !important; min-height: 250px; }
+    .q-txt { font-weight: bold; font-size: 20px; margin-bottom: 20px; line-height: 1.4; }
+    
+    /* Green Theme */
+    .theme-easy { border-color: {{EZ_NEON}} !important; box-shadow: 0 0 30px {{EZ_NEON}} !important; }
+    .theme-easy .q-txt { color: {{EZ_COL}}; text-shadow: 0 0 10px {{EZ_NEON}}; }
+    .theme-easy .ans-btn:hover { border-color: {{EZ_NEON}}; box-shadow: 0 0 15px {{EZ_NEON}}; }
+    
+    /* Yellow Theme */
+    .theme-hard { border-color: {{HD_NEON}} !important; box-shadow: 0 0 30px {{HD_NEON}} !important; }
+    .theme-hard .q-txt { color: {{HD_COL}}; text-shadow: 0 0 10px {{HD_NEON}}; }
+    .theme-hard .ans-btn:hover { border-color: {{HD_NEON}}; box-shadow: 0 0 15px {{HD_NEON}}; }
 
-        .answers-grid { display: flex; flex-direction: column; gap: 15px; width: 100%; }
-        .answer-btn {
-            background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.2); color: #fff;
-            padding: 18px 25px; cursor: pointer; transition: 0.3s; border-radius: 12px; text-align: left;
-            font-size: 18px; font-weight: bold; display: flex; align-items: center; gap: 15px;
-        }
-        .answer-btn:hover { background: rgba(255, 255, 255, 0.15); transform: translateX(10px); }
+    .ans-grid { display: flex; flex-direction: column; gap: 10px; width: 100%; }
+    .ans-btn {
+        background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.2); color: #fff;
+        padding: 12px 20px; cursor: pointer; border-radius: 8px; text-align: left; font-size: 16px;
+    }
 
-        .stats-table { width: 100%; margin: 15px auto; border-collapse: collapse; font-size: 16px; text-align: left; color: #ddd; }
-        .stats-table td { padding: 8px 10px; border-bottom: 1px solid rgba(255,255,255,0.2); }
-        .stats-table td:last-child { text-align: right; font-weight: bold; color: #fff; }
-        .total-row td { font-size: 22px; color: #0ff; text-shadow: 0 0 10px #0ff; border-top: 2px solid #0ff !important; padding-top: 15px; font-weight: bold; }
-        #music-btn { position: absolute; top: 15px; right: 15px; width: 40px; height: 40px; border: 2px solid ${config.neonTitle}; border-radius: 50%; color: ${config.neonTitle}; display: flex; justify-content: center; align-items: center; cursor: pointer; z-index: 30; background: rgba(0,0,0,0.5); }
-        #music-btn.off { border-color: #555; color: #555; }
-    </style>
+    #music-btn { position: absolute; top: 15px; right: 15px; width: 35px; height: 35px; border: 2px solid {{NEON_TITLE}}; border-radius: 50%; color: {{NEON_TITLE}}; display: flex; justify-content: center; align-items: center; cursor: pointer; z-index: 30; background: rgba(0,0,0,0.5); }
+    #music-btn.off { border-color: #555; color: #555; }
+</style>
 </head>
 <body>
 <div id="game-container">
     <div class="bg-layer"></div>
-    <canvas id="gameCanvas"></canvas>
+    <canvas id="gc"></canvas>
     <div id="music-btn" class="off">🎵</div>
     <div id="hud" class="hidden">
-        <span>Score: <b id="scoreVal">0</b></span>
-        <span>Lives: <b id="livesVal"></b></span>
-        <span>Combo: x<b id="comboVal">1</b></span>
-        <span>Time: <b id="timerVal"></b>s</span>
-        <span>🪙 x<b id="trophyVal">0</b></span>
+        <span>Score: <b id="sc">0</b></span>
+        <span>Lives: <b id="lv"></b></span>
+        <span>Time: <b id="tm"></b></span>
+        <span>🪙 <b id="tr">0</b></span>
     </div>
 
     <div id="start-screen" class="overlay">
         <div class="neon-panel">
-            <h1>${config.title}</h1>
-            <div class="rules-container">
-                <p>🎯 Control: Mouse or Touch</p>
-                <p>🟩 Easy / 🟨 Hard Questions</p>
-            </div>
-            <div style="display: flex; justify-content: center; gap: 12px; flex-wrap: wrap; font-size: 22px; margin: 5px 0 10px 0;">
-                <span>🪙</span> <span>❤️</span> <span>⏳</span> <span>↔️</span> <span>🥎</span> <span>🐌</span>
-            </div>
-            <button id="start-btn" class="btn">START GAME</button>
+            <h1>{{TITLE_TXT}}</h1>
+            <p>🟩 Easy Questions<br>🟨 Hard Questions</p>
+            <button class="btn" onclick="startGame()">PLAY</button>
         </div>
     </div>
 
-    <div id="question-modal" class="overlay hidden">
-        <div id="q-panel" class="neon-panel question-box">
-            <div class="q-title">TASK</div>
-            <div id="q-text" class="q-text">...</div>
-            <div id="q-answers" class="answers-grid"></div>
+    <div id="q-modal" class="overlay hidden">
+        <div id="q-panel" class="neon-panel q-box">
+            <div id="q-text" class="q-txt">...</div>
+            <div id="q-list" class="ans-grid"></div>
         </div>
     </div>
 
     <div id="end-screen" class="overlay hidden">
         <div class="neon-panel">
             <h1 id="end-title">GAME OVER</h1>
-            <table class="stats-table">
-                <tr><td>Correct:</td><td id="stat-correct">0</td></tr>
-                <tr><td>Wrong:</td><td id="stat-wrong">0</td></tr>
-                <tr><td>Trophies (🪙):</td><td id="stat-trophies">0</td></tr>
-                <tr><td>Time Bonus:</td><td id="stat-time">0</td></tr>
-                <tr class="total-row"><td>SCORE:</td><td id="stat-total">0</td></tr>
-            </table>
-            <button id="restart-btn" class="btn">PLAY AGAIN</button>
+            <p>Score: <span id="end-score">0</span></p>
+            <button class="btn" onclick="startGame()">RESTART</button>
         </div>
     </div>
 </div>
 
 <script>
-    // --- INJECTED DATA ---
-    const questionsData = ${JSON.stringify(tasks)};
-    const CONFIG = {
-        rows: ${config.rows}, cols: 7, lives: ${config.lives}, ballSpeed: ${config.speed}, timeLimit: ${config.time},
-        ballColor: '${config.ballCol}',
-        brickColors: { green: '#0f0', yellow: '#ff0', bonus: '#00BFFF', normals: ['#FF69B4', '#BA55D3', '#FFA500', '#20B2AA', '#F0F8FF'] }
+    // DATA INJECTION
+    const TASKS = {{TASKS_JSON}};
+    const CFG = {
+        rows: {{ROWS}}, 
+        cols: 7, 
+        lives: {{LIVES}}, 
+        speed: {{SPEED}}, 
+        time: {{TIME}},
+        ballCol: '{{BALL_COL}}',
+        winTxt: '{{WIN_TXT}}',
+        loseTxt: 'GAME OVER',
+        winEff: '{{WIN_EFF}}',
+        colors: { green: '{{EZ_NEON}}', yellow: '{{HD_NEON}}', bonus: '#00BFFF', norm: ['#FF69B4', '#BA55D3', '#FFA500', '#20B2AA'] }
     };
-    const ASSETS = {
-        bgm: ${assets.bgm ? `'${assets.bgm}'` : 'null'},
-        correct: ${assets.sfxCorrect ? `'${assets.sfxCorrect}'` : 'null'},
-        wrong: ${assets.sfxWrong ? `'${assets.sfxWrong}'` : 'null'},
-        win: ${assets.sfxWin ? `'${assets.sfxWin}'` : 'null'},
-        lose: ${assets.sfxLose ? `'${assets.sfxLose}'` : 'null'}
+    const SND = {
+        bgm: {{SND_BGM}}, cor: {{SND_COR}}, err: {{SND_ERR}}, win: {{SND_WIN}}, lose: {{SND_LOSE}}
     };
-    const WIN_EFFECT = '${config.winEff}';
-    const TEXTS = { win: '${config.winTxt}', lose: '${config.loseTxt}' };
 
-    // --- AUDIO SYSTEM (HYBRID) ---
-    let audioCtx; let musicPlaying = false; let musicInterval; let musicAudioObj = null;
-    function initAudio() {
-        if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-        if (audioCtx.state === 'suspended') audioCtx.resume();
-    }
+    // LOGIC
+    const cvs = document.getElementById('gc'); const ctx = cvs.getContext('2d');
+    let state='START', anim, timerId, acx;
+    let stats={sc:0, lv:CFG.lives, tr:0}, timeLeft=CFG.time;
+    let paddle={x:0, y:0, w:100, h:12}, balls=[], bricks=[], drops=[], parts=[];
+    let curQ=null, curRow=-1, W, H, musOn=false, musObj=null;
+
+    function initAudio() { if(!acx) acx = new (window.AudioContext||window.webkitAudioContext)(); if(acx.state==='suspended') acx.resume(); }
     
-    function toggleMusic() {
-        initAudio();
-        musicPlaying = !musicPlaying;
-        const btn = document.getElementById('music-btn');
-        if(musicPlaying) {
-            btn.classList.remove('off');
-            if(ASSETS.bgm) {
-                if(!musicAudioObj) { musicAudioObj = new Audio(ASSETS.bgm); musicAudioObj.loop = true; }
-                musicAudioObj.play();
-            } else {
-                let s = 0;
-                musicInterval = setInterval(() => {
-                    if(!audioCtx) return;
-                    const now = audioCtx.currentTime;
-                    const n = [261.63, 329.63, 392.00, 440.00][s % 4];
-                    const o = audioCtx.createOscillator(); const g = audioCtx.createGain();
-                    o.type = 'triangle'; o.frequency.setValueAtTime(n, now);
-                    g.gain.setValueAtTime(0.1, now); g.gain.exponentialRampToValueAtTime(0.001, now + 0.2);
-                    o.connect(g); g.connect(audioCtx.destination);
-                    o.start(now); o.stop(now + 0.3);
-                    s++;
-                }, 250);
-            }
-        } else {
-            btn.classList.add('off');
-            if(musicAudioObj) musicAudioObj.pause();
-            clearInterval(musicInterval);
-        }
-    }
-    document.getElementById('music-btn').onclick = toggleMusic;
+    document.getElementById('music-btn').onclick = function() {
+        musOn = !musOn; initAudio();
+        this.className = musOn ? '' : 'off';
+        if(musOn && SND.bgm) { if(!musObj) { musObj=new Audio(SND.bgm); musObj.loop=true; } musObj.play(); }
+        else if(musObj) musObj.pause();
+    };
 
-    function playSound(type) {
-        if(ASSETS[type]) { new Audio(ASSETS[type]).play(); return; }
-        if(!audioCtx) return;
-        const now = audioCtx.currentTime;
-        const osc = audioCtx.createOscillator(); const g = audioCtx.createGain();
-        osc.connect(g); g.connect(audioCtx.destination);
-        
-        if(type === 'bounce') {
-            osc.type = 'sine'; osc.frequency.setValueAtTime(400, now); osc.frequency.exponentialRampToValueAtTime(600, now + 0.1);
-            g.gain.setValueAtTime(0.3, now); g.gain.exponentialRampToValueAtTime(0.01, now + 0.1);
-            osc.start(now); osc.stop(now + 0.1);
-        } else if (type === 'tick') {
-            osc.type = 'triangle'; osc.frequency.setValueAtTime(1000, now);
-            g.gain.setValueAtTime(0.1, now); g.gain.exponentialRampToValueAtTime(0.001, now + 0.1);
-            osc.start(now); osc.stop(now + 0.1);
-        } else if (type === 'correct') {
-            osc.type = 'triangle'; osc.frequency.setValueAtTime(600, now); osc.frequency.linearRampToValueAtTime(900, now + 0.15);
-            g.gain.setValueAtTime(0.3, now); g.gain.linearRampToValueAtTime(0, now + 0.3);
-            osc.start(now); osc.stop(now + 0.3);
-        } else if (type === 'wrong') {
-            osc.type = 'sawtooth'; osc.frequency.setValueAtTime(150, now); osc.frequency.linearRampToValueAtTime(100, now + 0.3);
-            g.gain.setValueAtTime(0.3, now); g.gain.linearRampToValueAtTime(0, now + 0.3);
-            osc.start(now); osc.stop(now + 0.3);
-        } else if (type === 'win') {
-            [523, 659, 783, 1046].forEach((f, i) => {
-                 const o = audioCtx.createOscillator(); const gn = audioCtx.createGain();
-                 o.type = 'square'; o.frequency.value = f;
-                 gn.gain.setValueAtTime(0.2, now + i*0.15); gn.gain.exponentialRampToValueAtTime(0.01, now + i*0.15 + 0.4);
-                 o.connect(gn); gn.connect(audioCtx.destination); o.start(now + i*0.15); o.stop(now + i*0.15 + 0.5);
-            });
-        } else if (type === 'lose') {
-            [392, 349, 311, 261].forEach((f, i) => {
-                 const o = audioCtx.createOscillator(); const gn = audioCtx.createGain();
-                 o.type = 'sawtooth'; o.frequency.value = f;
-                 gn.gain.setValueAtTime(0.2, now + i*0.2); gn.gain.exponentialRampToValueAtTime(0.01, now + i*0.2 + 0.4);
-                 o.connect(gn); gn.connect(audioCtx.destination); o.start(now + i*0.2); o.stop(now + i*0.2 + 0.5);
-            });
-        } else if (type === 'powerup') {
-             osc.type = 'sine'; osc.frequency.setValueAtTime(300, now); osc.frequency.linearRampToValueAtTime(800, now + 0.3);
-             g.gain.setValueAtTime(0.3, now); g.gain.linearRampToValueAtTime(0, now + 0.4);
-             osc.start(now); osc.stop(now + 0.4);
-        }
+    function playSnd(type) {
+        if(SND[type]) { new Audio(SND[type]).play(); return; }
+        if(!acx) return;
+        const t=acx.currentTime; const o=acx.createOscillator(); const g=acx.createGain();
+        o.connect(g); g.connect(acx.destination);
+        if(type==='tick') { o.type='triangle'; o.frequency.setValueAtTime(800,t); g.gain.setValueAtTime(0.05,t); o.start(t); o.stop(t+0.1); }
+        else if(type==='cor') { o.frequency.setValueAtTime(600,t); o.frequency.linearRampToValueAtTime(1200,t+0.1); g.gain.value=0.1; o.start(t); o.stop(t+0.2); }
+        else if(type==='err') { o.type='sawtooth'; o.frequency.setValueAtTime(150,t); o.frequency.linearRampToValueAtTime(100,t+0.3); g.gain.value=0.1; o.start(t); o.stop(t+0.3); }
+        else if(type==='bounce') { o.frequency.setValueAtTime(400,t); g.gain.exponentialRampToValueAtTime(0.01,t+0.1); o.start(t); o.stop(t+0.1); }
     }
-
-    // --- GAME ENGINE ---
-    const canvas = document.getElementById('gameCanvas'); const ctx = canvas.getContext('2d');
-    let state = 'START', animationId, timerId;
-    let stats = { score: 0, correct: 0, wrong: 0, trophies: 0 };
-    let lives = CONFIG.lives, combo = 1, timeLeft = CONFIG.timeLimit;
-    let paddle = { x: 0, y: 0, w: 100, h: 12, baseW: 100 };
-    let balls = [], bricks = [], drops = [], particles = [];
-    let activeQuestion = null, activeRowIndex = -1, gameWidth, gameHeight;
-    const powerUpStack = ['🪙','🪙','🪙','🪙','🪙', '❤️','❤️', '⏳', '↔️', '🥎', '🐌'];
 
     function resize() {
         const c = document.getElementById('game-container');
-        const dpr = window.devicePixelRatio || 1;
-        canvas.width = c.clientWidth * dpr; canvas.height = c.clientHeight * dpr;
-        canvas.style.width = c.clientWidth + 'px'; canvas.style.height = c.clientHeight + 'px';
-        ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.scale(dpr, dpr);
-        gameWidth = c.clientWidth; gameHeight = c.clientHeight;
-        paddle.y = gameHeight - 40;
-        paddle.w = Math.max(80, Math.min(200, gameWidth * 0.25)); paddle.baseW = paddle.w;
-        if (paddle.x > gameWidth - paddle.w) paddle.x = gameWidth - paddle.w;
+        W = c.clientWidth; H = c.clientHeight;
+        cvs.width = W; cvs.height = H;
+        paddle.y = H - 40; paddle.w = Math.min(200, W*0.25);
     }
 
     function initBricks() {
-        bricks = []; drops = [];
-        const bW = gameWidth / CONFIG.cols; const bH = gameHeight * 0.035;
-        let qPool = [...questionsData];
-        // Distribute questions roughly evenly
-        let qDeck = [];
-        qPool.forEach(q => qDeck.push(q.level === 'easy' ? 'green' : 'yellow'));
-        // Fill rest with normals/bonus logic from original...
-        let pDeck = [...powerUpStack]; pDeck.sort(() => Math.random() - 0.5);
+        bricks=[]; 
+        const ezPool = TASKS.filter(t=>t.lvl==='easy');
+        const hdPool = TASKS.filter(t=>t.lvl==='hard');
         
-        for(let r=0; r<CONFIG.rows; r++) {
+        // Strategy: Fill rows with questions until pool empty
+        let grid = [];
+        for(let r=0; r<CFG.rows; r++) {
             let row = [];
-            let qType = null;
-            if (qDeck.length > 0 && ((CONFIG.rows - r) <= qDeck.length || Math.random() < 0.6)) {
-                 qType = qDeck.pop();
-            }
-            let qCol = qType ? Math.floor(Math.random() * CONFIG.cols) : -1;
-            for(let c=0; c<CONFIG.cols; c++) {
-                let type = 'normal'; let color = CONFIG.brickColors.normals[Math.floor(Math.random() * CONFIG.brickColors.normals.length)];
-                let icon = '', pUp = null;
-                if(c === qCol) { type = qType; color = CONFIG.brickColors[type]; }
-                else if(pDeck.length > 0 && Math.random() < 0.1) {
-                    type = 'bonus'; color = CONFIG.brickColors.bonus; pUp = pDeck.pop(); icon = pUp;
+            for(let c=0; c<CFG.cols; c++) {
+                let type = 'norm';
+                // Logic to inject questions
+                if(Math.random() < 0.3) {
+                    if(ezPool.length > 0 && Math.random() > 0.5) { type='green'; ezPool.pop(); }
+                    else if(hdPool.length > 0) { type='yellow'; hdPool.pop(); }
                 }
-                row.push({ x: c * bW + 2, y: r * (bH + 6) + 60, w: bW - 4, h: bH, type: type, color: color, active: true, icon: icon, powerUp: pUp });
+                // If pool empty but type assigned, fallback to norm
+                if((type==='green' && ezPool.length<0) || (type==='yellow' && hdPool.length<0)) type='norm';
+                
+                let color = type==='norm' ? CFG.colors.norm[Math.floor(Math.random()*4)] : CFG.colors[type];
+                row.push({x:0, y:0, w:0, h:0, t:type, c:color, a:true});
             }
             bricks.push(row);
         }
-    }
-
-    function resetBall() { balls = [{ x: paddle.x + paddle.w / 2, y: paddle.y - 10, r: 8, dx: 0, dy: 0, moving: false, trail: [] }]; }
-    
-    function update() {
-        if(state !== 'PLAY') return;
-        // Drops
-        for (let i = drops.length - 1; i >= 0; i--) {
-            let d = drops[i]; d.y += 2.5;
-            if (d.y > paddle.y && d.y < paddle.y + paddle.h && d.x > paddle.x && d.x < paddle.x + paddle.w) { activatePowerUp(d.type); drops.splice(i, 1); }
-            else if (d.y > gameHeight) drops.splice(i, 1);
-        }
-        // Balls
-        balls.forEach(ball => {
-            if(!ball.moving) { ball.x = paddle.x + paddle.w / 2; ball.y = paddle.y - ball.r - 1; return; }
-            ball.trail.push({x: ball.x, y: ball.y, alpha: 1.0}); if(ball.trail.length > 10) ball.trail.shift();
-            ball.trail.forEach(t => t.alpha -= 0.1);
-            ball.x += ball.dx; ball.y += ball.dy;
-            
-            if(ball.x > gameWidth - ball.r || ball.x < ball.r) { ball.dx = -ball.dx; playSound('bounce'); }
-            if(ball.y < ball.r) { ball.dy = -ball.dy; playSound('bounce'); }
-            if(ball.y > gameHeight) ball.dead = true;
-            
-            // Paddle collision
-            if(ball.y + ball.r > paddle.y && ball.x > paddle.x && ball.x < paddle.x + paddle.w) {
-                ball.dy = -Math.abs(ball.dy);
-                ball.dx = ((ball.x - (paddle.x + paddle.w/2)) / (paddle.w/2)) * 7;
-                playSound('bounce'); shakeScreen('small');
-            }
-            
-            // Brick collision
-            let hit = false;
-            bricks.forEach((row, rIdx) => {
-                row.forEach(b => {
-                    if(!b.active || hit) return;
-                    if(ball.x > b.x && ball.x < b.x + b.w && ball.y > b.y && ball.y < b.y + b.h) {
-                        ball.dy = -ball.dy; hit = true; shakeScreen('small');
-                        if(b.type === 'green' || b.type === 'yellow') { activeRowIndex = rIdx; triggerQuestion(b); }
-                        else if (b.type === 'bonus') { b.active = false; playSound('bounce'); drops.push({x: b.x + b.w/2, y: b.y, type: b.powerUp}); }
-                        else { b.active = false; stats.score += 10 * combo; playSound('bounce'); updateHUD(); }
-                    }
-                });
+        
+        // Layout calculation
+        const bw = W/CFG.cols; const bh = H*0.035;
+        bricks.forEach((row, r) => {
+            row.forEach((b, c) => {
+                b.w=bw-2; b.h=bh; b.x=c*bw+1; b.y=r*(bh+5)+60;
             });
         });
-        balls = balls.filter(b => !b.dead);
-        if(balls.length === 0 && state === 'PLAY') {
-            lives--; combo = 1; updateHUD(); playSound('wrong'); shakeScreen('hard'); paddle.w = paddle.baseW;
-            if(lives <= 0) endGame(false); else resetBall();
-        }
-        if(!bricks.some(row => row.some(b => b.active && (b.type === 'green' || b.type === 'yellow')))) endGame(true);
     }
-    
-    function activatePowerUp(type) {
-        playSound('powerup');
-        switch(type) {
-            case '🪙': stats.score += 50; stats.trophies++; break;
-            case '❤️': lives++; break;
-            case '⏳': timeLeft += 20; break;
-            case '↔️': paddle.w += 50; setTimeout(() => paddle.w -= 50, 10000); break;
-            case '🥎': if(balls.length) { let b=balls[0]; balls.push({...b, dx:b.dx-2, isExtra:true}, {...b, dx:b.dx+2, isExtra:true}); } break;
-            case '🐌': balls.forEach(b => {b.dx*=0.5; b.dy*=0.5;}); setTimeout(()=>balls.forEach(b=>{b.dx*=2;b.dy*=2}), 5000); break;
+
+    function update() {
+        if(state!=='PLAY') return;
+        balls.forEach(b => {
+            if(b.mov) {
+                b.x+=b.dx; b.y+=b.dy;
+                if(b.x<b.r || b.x>W-b.r) { b.dx*=-1; playSnd('bounce'); }
+                if(b.y<b.r) { b.dy*=-1; playSnd('bounce'); }
+                if(b.y>H) b.dead=true;
+                
+                // Paddle
+                if(b.y+b.r > paddle.y && b.x>paddle.x && b.x<paddle.x+paddle.w) {
+                    b.dy = -Math.abs(b.dy);
+                    b.dx = ((b.x-(paddle.x+paddle.w/2))/(paddle.w/2))*6;
+                    playSnd('bounce');
+                }
+                
+                // Brick
+                bricks.forEach((row, ri) => row.forEach(bk => {
+                    if(bk.a && b.x>bk.x && b.x<bk.x+bk.w && b.y>bk.y && b.y<bk.y+bk.h) {
+                        b.dy*=-1; 
+                        if(bk.t==='norm') { bk.a=false; stats.sc+=10; playSnd('bounce'); }
+                        else { 
+                            state='Q'; curQ=null; curRow=ri; 
+                            showQ(bk.t);
+                        }
+                    }
+                }));
+            } else { b.x=paddle.x+paddle.w/2; b.y=paddle.y-10; }
+        });
+        balls = balls.filter(b=>!b.dead);
+        if(balls.length===0 && state==='PLAY') {
+            stats.lv--; playSnd('err');
+            if(stats.lv<=0) end(false); else { balls.push({x:0,y:0,r:6,dx:0,dy:0,mov:false}); }
         }
-        updateHUD();
+        // Win condition check
+        const qLeft = bricks.some(r=>r.some(b=>b.a && (b.t==='green'||b.t==='yellow')));
+        if(!qLeft) end(true);
+        updHUD();
     }
 
     function draw() {
-        ctx.clearRect(0, 0, gameWidth, gameHeight);
+        ctx.clearRect(0,0,W,H);
         // Particles
-        particles.forEach((p, i) => {
-            p.x += p.dx; p.y += p.dy; p.life -= 0.02;
-            ctx.fillStyle = p.color; ctx.globalAlpha = p.life;
-            if(WIN_EFFECT==='bubbles') { ctx.beginPath(); ctx.arc(p.x,p.y,4,0,Math.PI*2); ctx.fill(); }
-            else if(WIN_EFFECT==='stars') { ctx.font='10px Arial'; ctx.fillText('⭐',p.x,p.y); }
-            else if(WIN_EFFECT==='flowers') { ctx.font='10px Arial'; ctx.fillText('🌸',p.x,p.y); }
-            else ctx.fillRect(p.x, p.y, 4, 4); 
-            if(p.life <= 0) particles.splice(i, 1);
+        parts.forEach((p,i) => {
+            p.x+=p.dx; p.y+=p.dy; p.l-=0.02;
+            ctx.globalAlpha=p.l; 
+            if(CFG.winEff==='stars') ctx.fillText('⭐',p.x,p.y);
+            else if(CFG.winEff==='flowers') ctx.fillText('🌸',p.x,p.y);
+            else { ctx.fillStyle=p.c; ctx.beginPath(); ctx.arc(p.x,p.y,p.s,0,7); ctx.fill(); }
+            if(p.l<=0) parts.splice(i,1);
         });
-        ctx.globalAlpha = 1;
-        
+        ctx.globalAlpha=1;
+
         // Paddle
-        ctx.fillStyle = 'rgba(255, 255, 255, 0.9)'; ctx.shadowBlur = 15; ctx.shadowColor = '#0ff';
-        ctx.fillRect(paddle.x, paddle.y, paddle.w, paddle.h); ctx.shadowBlur = 0;
-        
-        // Drops
-        ctx.font = '24px Arial'; drops.forEach(d => ctx.fillText(d.type, d.x - 10, d.y));
+        ctx.fillStyle='#fff'; ctx.shadowBlur=10; ctx.shadowColor='#0ff';
+        ctx.fillRect(paddle.x, paddle.y, paddle.w, paddle.h); ctx.shadowBlur=0;
 
-        // Balls
-        if(state !== 'END' && state !== 'WIN') {
-            balls.forEach(b => {
-                b.trail.forEach((t, i) => { ctx.beginPath(); ctx.arc(t.x, t.y, b.r*(i/10), 0, 7); ctx.fillStyle = \`rgba(255,255,0,\${t.alpha*0.4})\`; ctx.fill(); });
-                ctx.beginPath(); ctx.arc(b.x, b.y, b.r, 0, 7);
-                ctx.fillStyle = CONFIG.ballColor; ctx.fill();
-            });
-        }
-        
         // Bricks
-        bricks.forEach(row => {
-            row.forEach(b => {
-                if(!b.active) return;
-                ctx.fillStyle = b.type === 'normal' ? 'rgba(255,255,255,0.1)' : b.color;
-                ctx.strokeStyle = b.color; ctx.lineWidth = 2; ctx.shadowBlur = 10; ctx.shadowColor = b.color;
-                ctx.fillRect(b.x, b.y, b.w, b.h); ctx.strokeRect(b.x, b.y, b.w, b.h); ctx.shadowBlur = 0;
-                if(b.type === 'green' || b.type === 'yellow') {
-                    ctx.fillStyle = '#000'; ctx.font = 'bold 18px Arial'; ctx.fillText('?', b.x + b.w/2 - 5, b.y + b.h/2 + 6);
-                } else if (b.type === 'bonus') {
-                    ctx.fillStyle = '#fff'; ctx.font = '18px Arial'; ctx.fillText(b.icon, b.x + b.w/2 - 9, b.y + b.h/2 + 6);
-                }
-            });
-        });
-        
-        if(state === 'WIN' && Math.random() < 0.1) createFireworks();
+        bricks.forEach(r => r.forEach(b => {
+            if(!b.a) return;
+            ctx.fillStyle = b.t==='norm' ? 'rgba(255,255,255,0.1)' : b.c;
+            ctx.strokeStyle = b.c; ctx.lineWidth=2;
+            ctx.fillRect(b.x,b.y,b.w,b.h); ctx.strokeRect(b.x,b.y,b.w,b.h);
+            if(b.t!=='norm') { ctx.fillStyle='#000'; ctx.font='bold 16px Arial'; ctx.fillText('?', b.x+b.w/2-4, b.y+b.h/2+5); }
+        }));
+
+        // Ball
+        ctx.fillStyle=CFG.ballCol;
+        balls.forEach(b => { ctx.beginPath(); ctx.arc(b.x,b.y,b.r,0,7); ctx.fill(); });
     }
 
-    function loop() { update(); draw(); animationId = requestAnimationFrame(loop); }
-    
-    // QUESTION LOGIC
-    function triggerQuestion(brick) {
-        state = 'QUESTION';
-        const modal = document.getElementById('question-modal');
-        const panel = document.getElementById('q-panel');
+    function showQ(type) {
+        const pool = TASKS.filter(t => t.lvl === (type==='green'?'easy':'hard'));
+        const q = pool.length ? pool[Math.floor(Math.random()*pool.length)] : TASKS[0];
+        curQ = q;
+        
+        const modal = document.getElementById('q-modal');
+        const pnl = document.getElementById('q-panel');
         modal.classList.remove('hidden');
-        panel.className = 'neon-panel question-box ' + (brick.type === 'green' ? 'q-theme-green' : 'q-theme-yellow');
+        pnl.className = 'neon-panel q-box ' + (type==='green'?'theme-easy':'theme-hard');
         
-        // Pick random question of matching level
-        let pool = questionsData.filter(q => q.level === (brick.type === 'green' ? 'easy' : 'hard'));
-        if(!pool.length) pool = questionsData;
-        activeQuestion = pool[Math.floor(Math.random() * pool.length)];
+        document.getElementById('q-text').innerText = q.q;
+        const lst = document.getElementById('q-list'); lst.innerHTML='';
         
-        document.getElementById('q-text').innerText = activeQuestion.q;
-        const div = document.getElementById('q-answers'); div.innerHTML = '';
-        
-        activeQuestion.a.forEach((ans, i) => {
-            let btn = document.createElement('div');
-            btn.className = 'answer-btn';
-            btn.innerHTML = \`<span class="answer-dot" style="width:12px;height:12px;border-radius:50%;background:\${brick.type==='green'?'#0f0':'#ff0'};box-shadow:0 0 8px \${brick.type==='green'?'#0f0':'#ff0'}"></span> <span>\${ans}</span>\`;
-            btn.onclick = () => handleAnswer(i);
-            div.appendChild(btn);
+        q.opts.forEach((ans, i) => {
+            const btn = document.createElement('div');
+            btn.className = 'ans-btn';
+            btn.innerHTML = ans;
+            btn.onclick = () => ansQ(i);
+            lst.appendChild(btn);
         });
     }
 
-    function handleAnswer(idx) {
-        document.getElementById('question-modal').classList.add('hidden');
-        if(idx === activeQuestion.correct) {
-            playSound('correct'); stats.correct++;
-            bricks[activeRowIndex].forEach(b => b.active = false); // Clear row
-            stats.score += 100 * combo; combo++;
+    function ansQ(idx) {
+        document.getElementById('q-modal').classList.add('hidden');
+        if(idx === curQ.cor) {
+            playSnd('cor'); stats.sc+=100;
+            bricks[curRow].forEach(b => b.a = false); // Clear row
         } else {
-            playSound('wrong'); stats.wrong++; lives--; combo = 1; shakeScreen('hard');
-            bricks[activeRowIndex].forEach(b => { if(b.type === 'green' || b.type === 'yellow') { b.type = 'normal'; b.color = '#fff'; } });
+            playSnd('err'); stats.lv--; 
+            bricks[curRow].forEach(b => { if(b.t!=='norm') { b.t='norm'; b.c='#666'; } });
         }
-        updateHUD(); if(lives <= 0) endGame(false); else state = 'PLAY';
+        if(stats.lv<=0) end(false); else state='PLAY';
     }
 
-    function shakeScreen(type) {
-        const c = document.getElementById('game-container');
-        c.classList.remove(type==='hard' ? 'shake' : 'shake-small');
-        void c.offsetWidth;
-        c.classList.add(type==='hard' ? 'shake' : 'shake-small');
-    }
-
-    function updateHUD() {
-        document.getElementById('scoreVal').innerText = stats.score;
-        document.getElementById('livesVal').innerText = '❤️'.repeat(Math.max(0, lives));
-        document.getElementById('comboVal').innerText = combo;
-        document.getElementById('trophyVal').innerText = stats.trophies;
-    }
-
-    function endGame(win) {
-        state = win ? 'WIN' : 'END'; clearInterval(timerId);
-        const endScreen = document.getElementById('end-screen');
-        endScreen.classList.remove('hidden'); document.getElementById('hud').classList.add('hidden');
-        const title = document.getElementById('end-title');
-        title.innerText = win ? TEXTS.win : TEXTS.lose;
-        title.style.color = win ? "#0f0" : "#f00";
-        if(win) { playSound('win'); endScreen.classList.add('win-mode'); } else { playSound('lose'); endScreen.classList.remove('win-mode'); }
-        
-        let total = stats.score + (stats.trophies * 50) + (win ? timeLeft * 10 : 0);
-        document.getElementById('stat-correct').innerText = stats.correct;
-        document.getElementById('stat-wrong').innerText = stats.wrong;
-        document.getElementById('stat-trophies').innerText = stats.trophies;
-        document.getElementById('stat-time').innerText = win ? timeLeft*10 : 0;
-        document.getElementById('stat-total').innerText = total;
-    }
-
-    function createFireworks() {
-        playSound('firework');
-        for(let i=0; i<30; i++) {
-            particles.push({
-                x: Math.random() * canvas.width, y: Math.random() * canvas.height/2,
-                dx: (Math.random()-0.5)*8, dy: (Math.random()-0.5)*8, life: 1, 
-                color: \`hsl(\${Math.random()*360}, 100%, 50%)\`
+    function end(win) {
+        state = win?'WIN':'END'; clearInterval(timerId);
+        document.getElementById('hud').classList.add('hidden');
+        document.getElementById('end-screen').classList.remove('hidden');
+        const t = document.getElementById('end-title');
+        t.innerText = win ? CFG.winTxt : CFG.loseTxt;
+        t.style.color = win ? '#0f0' : '#f00';
+        document.getElementById('end-score').innerText = stats.sc;
+        playSnd(win?'win':'lose');
+        if(win) setInterval(() => {
+            for(let i=0; i<10; i++) parts.push({
+                x:Math.random()*W, y:Math.random()*H, dx:(Math.random()-0.5)*5, dy:(Math.random()-0.5)*5,
+                l:1, s:Math.random()*5+2, c:'hsl('+Math.random()*360+',100%,50%)'
             });
-        }
+        }, 300);
     }
 
+    function updHUD() {
+        document.getElementById('sc').innerText = stats.sc;
+        document.getElementById('lv').innerText = '❤️'.repeat(stats.lv);
+        const tm = document.getElementById('tm');
+        tm.innerText = timeLeft;
+        tm.className = timeLeft<=10 ? 'timer-warn' : '';
+    }
+
+    window.onmousemove = e => paddle.x = e.clientX - 60;
+    window.onclick = () => { if(state==='PLAY' && !balls[0].mov) { balls[0].mov=true; balls[0].dy=-CFG.speed; balls[0].dx=2; } };
+    function loop() { requestAnimationFrame(loop); update(); draw(); }
+    
     function startGame() {
         initAudio();
         document.getElementById('start-screen').classList.add('hidden');
         document.getElementById('end-screen').classList.add('hidden');
         document.getElementById('hud').classList.remove('hidden');
-        state = 'PLAY'; lives = CONFIG.lives; combo = 1; stats = {score:0, correct:0, wrong:0, trophies:0};
-        timeLeft = CONFIG.timeLimit; resize(); initBricks(); updateHUD(); resetBall();
+        resize();
+        state='PLAY'; stats.sc=0; stats.lv=CFG.lives; timeLeft=CFG.time;
+        balls=[{x:0,y:0,r:6,dx:0,dy:0,mov:false}];
+        parts=[];
+        initBricks(); updHUD();
         clearInterval(timerId);
         timerId = setInterval(() => {
-            if(state === 'PLAY') {
+            if(state==='PLAY') {
                 timeLeft--; 
-                let t = document.getElementById('timerVal'); t.innerText = timeLeft;
-                if(timeLeft <= 5) { t.parentElement.classList.add('timer-warning'); playSound('tick'); }
-                else t.parentElement.classList.remove('timer-warning');
-                if(timeLeft <= 0) endGame(false);
+                if(timeLeft<=5) playSnd('tick');
+                if(timeLeft<=0) end(false);
+                updHUD();
             }
         }, 1000);
-        cancelAnimationFrame(animationId); loop();
+        loop();
     }
-
-    document.getElementById('start-btn').onclick = startGame;
-    document.getElementById('restart-btn').onclick = startGame;
-    
-    function movePaddle(cx) {
-        if(state !== 'PLAY' && state !== 'START') return;
-        const rect = canvas.getBoundingClientRect();
-        paddle.x = cx - rect.left - paddle.w/2;
-        if(paddle.x < 0) paddle.x = 0; if(paddle.x > gameWidth - paddle.w) paddle.x = gameWidth - paddle.w;
-        balls.forEach(b => { if(!b.moving) b.x = paddle.x + paddle.w/2; });
-    }
-    canvas.addEventListener('mousemove', e => movePaddle(e.clientX));
-    canvas.addEventListener('touchmove', e => { e.preventDefault(); movePaddle(e.touches[0].clientX); }, {passive: false});
-    const launch = () => { if(state === 'PLAY') balls.forEach(b => { if(!b.moving) { b.moving = true; b.dy = -CONFIG.ballSpeed; b.dx = (Math.random()*4-2); initAudio(); } }); };
-    canvas.addEventListener('click', launch); canvas.addEventListener('touchstart', launch);
-    window.onresize = resize;
-    setTimeout(resize, 100);
+    window.startGame = startGame;
 </script>
 </body>
-</html>`;
+</html>
+</script>
 
-        // 3. Вывод
-        // Обновляем превью
-        document.getElementById('gamePreview').srcdoc = gameHTML;
+<script>
+    // --- JS РЕДАКТОРА ---
+    const files = {};
 
-        // Копируем код для Genially (через Iframe)
-        const embedCode = `<iframe srcdoc="${gameHTML.replace(/"/g, '&quot;')}" width="100%" height="100%" frameborder="0"></iframe>`;
-        
-        // Копируем в буфер (если нажата кнопка, а не просто обновление превью)
-        if(event && event.type === 'click') {
-            navigator.clipboard.writeText(embedCode).then(() => {
-                alert('КОД СКОПИРОВАН!\n\nИнструкция для Genially:\n1. Вставьте элемент "Insert > Other"\n2. Вставьте скопированный код\n3. Растяните на весь экран.');
-            });
+    function setTab(id) {
+        document.querySelectorAll('.scroll-content').forEach(el => el.style.display = 'none');
+        document.getElementById('tab-' + id).style.display = 'block';
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        event.target.classList.add('active');
+    }
+
+    function toggleBg() {
+        const t = document.getElementById('inp-bgType').value;
+        document.getElementById('bg-color-grp').style.display = t==='color'?'block':'none';
+        document.getElementById('bg-img-grp').style.display = t==='image'?'block':'none';
+    }
+
+    function loadFile(inp, key) {
+        if(inp.files[0]) {
+            const r = new FileReader();
+            r.onload = e => { files[key] = e.target.result; generate(); };
+            r.readAsDataURL(inp.files[0]);
         }
     }
 
-    // Инициализация при загрузке
-    generateCode();
-</script>
+    function parseTasks(qId, aId, lvl) {
+        const qs = document.getElementById(qId).value.split('\n').filter(s=>s.trim());
+        const as = document.getElementById(aId).value.split('\n').filter(s=>s.trim());
+        return qs.map((q, i) => {
+            if(!as[i]) return null;
+            const parts = as[i].split('|');
+            const correctTxt = parts[0];
+            const shuffled = [...parts].sort(()=>Math.random()-0.5);
+            return {
+                q: q,
+                opts: shuffled,
+                cor: shuffled.indexOf(correctTxt),
+                lvl: lvl
+            };
+        }).filter(x=>x);
+    }
 
+    function generate() {
+        const ez = parseTasks('easyQ', 'easyA', 'easy');
+        const hd = parseTasks('hardQ', 'hardA', 'hard');
+        const allTasks = [...ez, ...hd];
+        
+        let rows = 12;
+        if(allTasks.length > 10) rows = Math.min(18, 12 + (allTasks.length - 10));
+
+        let tpl = document.getElementById('game-template').innerHTML;
+        
+        // Helper to replace text
+        const rep = (k, v) => tpl = tpl.replace(new RegExp('{{'+k+'}}', 'g'), v);
+        
+        rep('TITLE_TXT', document.getElementById('inp-title').value);
+        rep('TITLE_FONT', document.getElementById('inp-fontTitle').value);
+        rep('TITLE_SIZE', document.getElementById('inp-sizeTitle').value);
+        rep('TITLE_COL', document.getElementById('inp-colTitle').value);
+        rep('NEON_TITLE', document.getElementById('inp-neonTitle').value);
+        
+        // BG
+        const bgT = document.getElementById('inp-bgType').value;
+        let bgStyle = '';
+        if(bgT === 'color') bgStyle = `background: ${document.getElementById('inp-bgColor').value};`;
+        else if(bgT === 'image' && files.bg) bgStyle = `background: url('${files.bg}') center/cover;`;
+        rep('BG_STYLE', bgStyle);
+
+        // Game Settings
+        rep('LIVES', document.getElementById('inp-lives').value);
+        rep('TIME', document.getElementById('inp-time').value);
+        rep('SPEED', document.getElementById('inp-speed').value);
+        rep('BALL_COL', document.getElementById('inp-ballCol').value);
+        rep('ROWS', rows);
+        
+        // Tasks Visuals
+        rep('EZ_COL', document.getElementById('inp-ezCol').value);
+        rep('EZ_NEON', document.getElementById('inp-ezNeon').value);
+        rep('HD_COL', document.getElementById('inp-hdCol').value);
+        rep('HD_NEON', document.getElementById('inp-hdNeon').value);
+
+        // Win
+        rep('WIN_TXT', document.getElementById('inp-winTxt').value);
+        rep('WIN_EFF', document.getElementById('inp-winEff').value);
+
+        // Data & Sounds
+        rep('TASKS_JSON', JSON.stringify(allTasks));
+        rep('SND_BGM', files.bgm ? `'${files.bgm}'` : 'null');
+        rep('SND_COR', files.cor ? `'${files.cor}'` : 'null');
+        rep('SND_ERR', files.err ? `'${files.err}'` : 'null');
+        rep('SND_WIN', files.win ? `'${files.win}'` : 'null');
+        rep('SND_LOSE', files.lose ? `'${files.lose}'` : 'null');
+
+        // Render
+        const finalHTML = tpl.replace(/&lt;/g, '<').replace(/&gt;/g, '>');
+        document.getElementById('previewFrame').srcdoc = finalHTML;
+        
+        // Copy logic (if clicked by user)
+        if(event && event.type==='click' && event.target.className.includes('generate-btn')) {
+            const copyStr = `<iframe srcdoc="${finalHTML.replace(/"/g, '&quot;')}" width="100%" height="100%" frameborder="0"></iframe>`;
+            navigator.clipboard.writeText(copyStr).then(()=>alert('Код скопирован!'));
+        }
+    }
+
+    // Init
+    generate();
+</script>
 </body>
 </html>
