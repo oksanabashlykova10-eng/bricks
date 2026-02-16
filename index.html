@@ -326,16 +326,16 @@ max-width:none; /* не ограничиваем */
     }
 
     /* ✅ FIX #1: Preview scale (ONLY in editor preview) */
-    .preview-box .mock-start,
-    .preview-box .mock-question{
-      transform: scale(.84);
-      transform-origin: top center;
-    }
+   .preview-box .mock-start,
+.preview-box .mock-question{
+  transform: translateY(14px) scale(.74);
+  transform-origin: top center;
+}
 
     /* Mock start screen */
     .mock-start{
       position:absolute;
-      inset:46px 18px 18px 18px;
+      inset:34px 18px 18px 18px;
       display:flex;
       justify-content:center;
       align-items:center;
@@ -437,7 +437,7 @@ max-width:none; /* не ограничиваем */
     /* Mock question modal */
     .mock-question{
       position:absolute;
-      inset:46px 18px 18px 18px;
+      inset:34px 18px 18px 18px;
       display:flex;
       justify-content:center;
       align-items:center;
@@ -712,6 +712,18 @@ max-width:none; /* не ограничиваем */
               <label>Цвет подсветки шарика</label>
               <input id="ballGlow" type="color" value="#ffff00">
             </div>
+          </div>
+
+          <div class="grid2" style="margin-top:10px">
+            <div>
+              <label>Нейтральные кирпичи</label>
+              <select id="neutralStyle">
+                <option value="glass" selected>Прозрачные (стекло)</option>
+                <option value="solid">Непрозрачные</option>
+              </select>
+              <div class="help">Стекло — как в оригинале. Непрозрачные — плотнее, но с неоном.</div>
+            </div>
+            <div></div>
           </div>
 
           <div class="grid2" style="margin-top:10px">
@@ -1075,7 +1087,7 @@ bindSfx("sfxTick","tick");
   "startTitle","startBtnText","startFont","startSize","startTextColor","startNeon","startNeonOn",
   "winTitle","loseTitle","restartText","endNeon","winFX","btnNeon",
   "bgMode","bgColor","lives","timeLimit","ballSpeed","ballColor","ballGlow",
-  "brickGreen","brickYellow",
+  "brickGreen","brickYellow","neutralStyle",
   "easyQ","easyA","hardQ","hardA",
   "musicAutoplay","musicLoop","musicVol"
 ].forEach(id=>{
@@ -1205,6 +1217,7 @@ endStatsWeight: 800,
       ballSpeed: clamp(v("ballSpeed"), 1, 8),
       ballColor: v("ballColor") || "#ffffff",
       ballGlow: v("ballGlow") || "#ffff00",
+      neutralStyle: v("neutralStyle") || "glass",
       brickColors: {
         green: v("brickGreen") || "#00ff66",
         yellow: v("brickYellow") || "#ffe600",
@@ -2046,27 +2059,43 @@ text-transform: uppercase;
         const isBonus = (b.type==='bonus');
         const glow = b.color;
 
-        // ✅ FIX #3: glass + neon haze for NEUTRAL
+        // ✅ FIX #3: glass / solid + neon haze for NEUTRAL (toggle)
         if(b.type === 'neutral'){
-          ctx.fillStyle = 'rgba(0,0,0,0.18)';
-          ctx.fillRect(b.x, b.y, b.w, b.h);
+          const mode = (CONFIG.gameplay && CONFIG.gameplay.neutralStyle) ? CONFIG.gameplay.neutralStyle : 'glass';
 
-          // inner highlight gradient
-          const g = ctx.createLinearGradient(b.x, b.y, b.x, b.y + b.h);
-          g.addColorStop(0, 'rgba(255,255,255,0.10)');
-          g.addColorStop(0.45, 'rgba(255,255,255,0.03)');
-          g.addColorStop(1, 'rgba(255,255,255,0.00)');
-          ctx.fillStyle = g;
-          ctx.fillRect(b.x, b.y, b.w, b.h);
+          if(mode === 'solid'){
+            // darker, denser neutral brick (still neon)
+            ctx.fillStyle = 'rgba(0,0,0,0.42)';
+            ctx.fillRect(b.x, b.y, b.w, b.h);
 
-          // subtle colored haze
-          ctx.save();
-          ctx.globalAlpha = 0.10;
-          ctx.fillStyle = glow;
-          ctx.fillRect(b.x, b.y, b.w, b.h);
-          ctx.restore();
+            ctx.save();
+            ctx.globalAlpha = 0.28;
+            ctx.fillStyle = glow;
+            ctx.fillRect(b.x, b.y, b.w, b.h);
+            ctx.restore();
 
-          // neon outline
+          } else {
+            // glass-like neutral brick (original airy look)
+            ctx.fillStyle = 'rgba(0,0,0,0.18)';
+            ctx.fillRect(b.x, b.y, b.w, b.h);
+
+            // inner highlight gradient
+            const g = ctx.createLinearGradient(b.x, b.y, b.x, b.y + b.h);
+            g.addColorStop(0, 'rgba(255,255,255,0.10)');
+            g.addColorStop(0.45, 'rgba(255,255,255,0.03)');
+            g.addColorStop(1, 'rgba(255,255,255,0.00)');
+            ctx.fillStyle = g;
+            ctx.fillRect(b.x, b.y, b.w, b.h);
+
+            // subtle colored haze
+            ctx.save();
+            ctx.globalAlpha = 0.10;
+            ctx.fillStyle = glow;
+            ctx.fillRect(b.x, b.y, b.w, b.h);
+            ctx.restore();
+          }
+
+          // neon outline (for both modes)
           ctx.strokeStyle = glow;
           ctx.lineWidth = 2;
           ctx.shadowBlur = 14;
