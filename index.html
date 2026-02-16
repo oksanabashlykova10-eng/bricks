@@ -1143,16 +1143,108 @@ updatePreview();
    COPY iframe for Genially
 ========================= */
 el('copyBtn').addEventListener('click', async ()=>{
-  try{
-    const html = buildGameHtml();
-    const iframe = `<iframe style="width:100%;height:100%;border:0" srcdoc='${escapeForSrcdoc(html)}'></iframe>`;
-    await navigator.clipboard.writeText(iframe);
+  const html = buildGameHtml();
+  const iframe = `<iframe style="width:100%;height:100%;border:0" srcdoc='${escapeForSrcdoc(html)}'></iframe>`;
+
+  const ok = await smartCopy(iframe);
+  if(ok){
     flashCopy();
-  }catch(e){
-    console.error(e);
-    alert("Не удалось скопировать. Открой через https (GitHub Pages) и попробуй снова.");
+  }else{
+    console.warn("Clipboard blocked in iframe, showing manual copy modal.");
+    showCopyModal(iframe);
   }
 });
+
+async function smartCopy(text){
+  // 1) Modern clipboard (may fail inside Genially iframe)
+  try{
+    if(navigator.clipboard && window.isSecureContext){
+      await navigator.clipboard.writeText(text);
+      return true;
+    }
+  }catch(e){}
+
+  // 2) Fallback: textarea + execCommand
+  try{
+    const ta = document.createElement('textarea');
+    ta.value = text;
+    ta.setAttribute('readonly','');
+    ta.style.position = 'fixed';
+    ta.style.left = '-9999px';
+    ta.style.top = '-9999px';
+    document.body.appendChild(ta);
+    ta.focus();
+    ta.select();
+    const ok = document.execCommand('copy');
+    document.body.removeChild(ta);
+    if(ok) return true;
+  }catch(e){}
+
+  return false;
+}
+
+function showCopyModal(text){
+  const wrap = document.createElement('div');
+  wrap.style.cssText = `
+    position:fixed; inset:0; z-index:999999;
+    background:rgba(0,0,0,.70);
+    display:flex; align-items:center; justify-content:center;
+    padding:16px;
+  `;
+  const box = document.createElement('div');
+  box.style.cssText = `
+    width:min(920px,95vw);
+    max-height:90vh; overflow:auto;
+    background:rgba(6,10,34,.95);
+    border:2px solid rgba(0,245,255,.75);
+    box-shadow:0 0 26px rgba(0,245,255,.35), inset 0 0 18px rgba(0,0,0,.55);
+    border-radius:16px;
+    padding:14px;
+    color:#eaf6ff;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  `;
+  box.innerHTML = `
+    <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:10px;">
+      <div style="font-weight:900;letter-spacing:1px;">Скопируй код вручную (Ctrl+C)</div>
+      <button id="cmClose"
+        style="cursor:pointer;border-radius:10px;border:1px solid rgba(255,255,255,.25);
+               background:rgba(255,255,255,.06);color:#eaf6ff;padding:6px 10px;">
+        ✕
+      </button>
+    </div>
+    <textarea id="cmTA"
+      style="width:100%;height:55vh;resize:vertical;border-radius:12px;
+             border:1px solid rgba(255,255,255,.22);
+             background:rgba(0,0,0,.35);color:#eaf6ff;padding:10px;
+             font-family:inherit;font-size:12px;line-height:1.35;"></textarea>
+    <div style="margin-top:10px;display:flex;gap:10px;justify-content:flex-end;">
+      <button id="cmSelect"
+        style="cursor:pointer;border-radius:12px;border:2px solid #00ff66;
+               background:rgba(0,0,0,.35);color:#00ff66;padding:8px 12px;font-weight:900;">
+        Выделить всё
+      </button>
+      <button id="cmOk"
+        style="cursor:pointer;border-radius:12px;border:1px solid rgba(255,255,255,.25);
+               background:rgba(255,255,255,.06);color:#eaf6ff;padding:8px 12px;">
+        Закрыть
+      </button>
+    </div>
+  `;
+  wrap.appendChild(box);
+  document.body.appendChild(wrap);
+
+  const ta = box.querySelector('#cmTA');
+  ta.value = text;
+
+  const close = ()=>{ document.body.removeChild(wrap); };
+  box.querySelector('#cmClose').onclick = close;
+  box.querySelector('#cmOk').onclick = close;
+  box.querySelector('#cmSelect').onclick = ()=>{ ta.focus(); ta.select(); };
+
+  wrap.addEventListener('click', (e)=>{ if(e.target===wrap) close(); });
+
+  setTimeout(()=>{ ta.focus(); ta.select(); }, 60);
+}
 
 function flashCopy(){
   const b = el('copyBtn');
@@ -1161,6 +1253,7 @@ function flashCopy(){
   b.style.transform = "translateY(-1px)";
   setTimeout(()=>{ b.textContent = old; b.style.transform = ""; }, 1100);
 }
+
 function escapeForSrcdoc(s){
   return String(s)
     .replace(/&/g, "&amp;")
